@@ -1,0 +1,26 @@
+# vs code
+.vscode/
+
+# MACOS
+.DS_store
+
+# rust
+rustic
+
+# js
+node_modules
+htmls
+
+# Go
+app
+target
+sqlite3.db
+testdata/
+vendor/
+plugin.so
+
+# external
+data/
+xd/
+discovery
+target

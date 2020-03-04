@@ -1,0 +1,245 @@
+{
+  "consumes": [
+    "application/json",
+    "application/xml"
+  ],
+  "produces": [
+    "application/json",
+    "application/xml"
+  ],
+  "schemes": [
+    "http",
+    "https"
+  ],
+  "swagger": "2.0",
+  "info": {
+    "description": "the purpose of this application is to provide an application\nthat is using plain go code to define an API\n\nThis should demonstrate all the possible comment annotations\nthat are available to turn go code into a fully compliant swagger 2.0 spec",
+    "title": "Petstore API.",
+    "termsOfService": "there are no TOS at this moment, use at your own risk we take no responsibility",
+    "contact": {
+      "name": "John Doe",
+      "url": "http://john.doe.com",
+      "email": "john.doe@example.com"
+    },
+    "license": {
+      "name": "MIT",
+      "url": "http://opensource.org/licenses/MIT"
+    },
+    "version": "0.0.1"
+  },
+  "host": "localhost:8088",
+  "basePath": "/",
+  "paths": {
+    "/base/get": {
+      "get": {
+        "description": "swagger Get范例",
+        "consumes": [
+          "application/json",
+          "application/x-protobuf"
+        ],
+        "produces": [
+          "application/json",
+          "application/x-protobuf"
+        ],
+        "schemes": [
+          "http",
+          "https",
+          "ws",
+          "wss"
+        ],
+        "tags": [
+          "范例"
+        ],
+        "operationId": "opid-get",
+        "parameters": [
+          {
+            "type": "integer",
+            "format": "int64",
+            "name": "ID",
+            "in": "query"
+          }
+        ],
+        "responses": {
+          "default": {
+            "$ref": "#/responses/getResponse"
+          }
+        }
+      }
+    },
+    "/base/post": {
+      "post": {
+        "description": "swagger Get范例",
+        "consumes": [
+          "application/json",
+          "application/x-protobuf"
+        ],
+        "produces": [
+          "application/json",
+          "application/x-protobuf"
+        ],
+        "schemes": [
+          "http",
+          "https",
+          "ws",
+          "wss"
+        ],
+        "tags": [
+          "范例"
+        ],
+        "operationId": "opid-post",
+        "parameters": [
+          {
+            "name": "ID",
+            "in": "body",
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "default": {
+            "$ref": "#/responses/postResponse"
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "GetModel": {
+      "type": "object",
+      "title": "GetModel ...",
+      "properties": {
+        "is_get": {
+          "type": "boolean",
+          "x-go-name": "Get"
+        },
+        "name": {
+          "type": "string",
+          "x-go-name": "ModelName"
+        }
+      },
+      "x-go-package": "swagger-demo/models"
+    },
+    "PostModel": {
+      "type": "object",
+      "title": "PostModel ...",
+      "properties": {
+        "is_post": {
+          "type": "boolean",
+          "x-go-name": "Post"
+        },
+        "name": {
+          "type": "string",
+          "x-go-name": "ModelName"
+        }
+      },
+      "x-go-package": "swagger-demo/models"
+    },
+    "getForm": {
+      "type": "object",
+      "properties": {
+        "ID": {
+          "description": "in: query",
+          "type": "integer",
+          "format": "int64"
+        }
+      },
+      "x-go-package": "swagger-demo/controllers"
+    },
+    "getResponse": {
+      "description": "getResponse response demo of get controller",
+      "type": "object",
+      "properties": {
+        "code": {
+          "description": "code int\nin: body",
+          "type": "integer",
+          "format": "int64",
+          "x-go-name": "Code"
+        },
+        "models": {
+          "$ref": "#/definitions/getmodels"
+        }
+      },
+      "x-go-package": "swagger-demo/controllers"
+    },
+    "getmodels": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/GetModel"
+      },
+      "x-go-package": "swagger-demo/controllers"
+    },
+    "postForm": {
+      "type": "object",
+      "properties": {
+        "ID": {
+          "description": "in: body",
+          "type": "integer",
+          "format": "int64"
+        }
+      },
+      "x-go-package": "swagger-demo/controllers"
+    },
+    "postResponse": {
+      "description": "postResponse response demo of post controller",
+      "type": "object",
+      "properties": {
+        "code": {
+          "description": "code int\nin: body",
+          "type": "integer",
+          "format": "int64",
+          "x-go-name": "Code"
+        },
+        "models": {
+          "$ref": "#/definitions/postmodels"
+        }
+      },
+      "x-go-package": "swagger-demo/controllers"
+    },
+    "postmodels": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/PostModel"
+      },
+      "x-go-package": "swagger-demo/controllers"
+    }
+  },
+  "responses": {
+    "getResponse": {
+      "description": "getResponse response demo of get controller",
+      "schema": {
+        "$ref": "#/definitions/getmodels"
+      }
+    },
+    "postResponse": {
+      "description": "postResponse response demo of post controller",
+      "schema": {
+        "$ref": "#/definitions/postmodels"
+      }
+    }
+  },
+  "securityDefinitions": {
+    "api_key": {
+      "type": "apiKey",
+      "name": "KEY",
+      "in": "header"
+    }
+  },
+  "security": [
+    {
+      "api_key": []
+    }
+  ],
+  "x-meta-array": [
+    "value1",
+    "value2"
+  ],
+  "x-meta-array-obj": [
+    {
+      "name": "obj",
+      "value": "field"
+    }
+  ],
+  "x-meta-value": "value"
+}

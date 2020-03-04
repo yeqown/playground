@@ -1,0 +1,18 @@
+syntax = "proto3";
+
+service SocketIO {
+    rpc GenNamespace(genNspReq) returns (genNspResp); // 开启一个Namespace
+
+    rpc BroadcasrToRoom() returns ();
+    rpc ShutdownRoom() returns ();
+}
+
+message genNspReq {
+    string Name = 1; // Nsp name
+    string OnoffQueue = 2; // 上下线消息的推送队列名
+    // ...
+}
+
+message broadcastMsg {
+
+}

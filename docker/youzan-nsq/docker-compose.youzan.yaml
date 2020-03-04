@@ -1,0 +1,34 @@
+version: '3'
+services:
+  nsqlookupd:
+    image: yeqown/youzan-nsq
+    command: nsqlookupd -config=/youzan/nsq/nsqlookupd.conf
+    networks: 
+      - nsq-net
+    ports:
+      - "4160:4160"
+      - "4161:4161"
+  nsqd:
+    image: yeqown/youzan-nsq
+    command: nsqd -config=/youzan/nsq/nsqd.conf
+    networks: 
+      - nsq-net
+    depends_on:
+      - nsqlookupd
+    ports:
+      - "4150:4150"
+      - "4151:4151"
+  nsqadmin:
+    image: yeqown/youzan-nsq
+    command: nsqadmin -config=/youzan/nsq/nsqadmin.conf
+    networks: 
+      - nsq-net
+    depends_on:
+      - nsqlookupd  
+    ports:
+      - "4171:4171"
+
+networks:
+  nsq-net:
+    external: true
+    name: host

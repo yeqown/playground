@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Image Editing</title>
+</head>
+<style>
+    body {
+        padding: 4em;
+    }
+
+    ul {
+        list-style: none;
+        padding: 0;
+    }
+
+    .btn {
+        margin: .4em .2em;
+        border: solid 1px white;
+        text-align: center;
+    }
+
+    .btn:hover {
+        background-color: salmon;
+        color: #ffffff;
+        cursor: pointer;
+    }
+
+    .wrapper {
+        width: 740px;
+        height: 480px;
+        /* background-color: aquamarine; */
+        border: solid 1px salmon;
+    }
+
+    .tool-pannel {
+        width: 100px;
+        height: 480px;
+        float: left;
+        background-color: lightgray;
+    }
+
+    .canvas {
+        width: 640px;
+        height: 480px;
+        float: left;
+        background-color: white;
+    }
+</style>
+
+<body>
+    <div>
+        <h1>this is an image Editing tools</h1>
+    </div>
+    <div class="wrapper">
+        <div class="tool-pannel">
+            <ul>
+                <label for="mode-select">
+                    <li class="btn">切换模式<button type="file" id="mode-select" style="display: none;"
+                            onclick="changeMode()" /></li>
+                </label>
+                <label for="img-inputer">
+                    <li class="btn">插入图片<input type="file" accept="image/jpg,image/jpeg,image/gif,image/png"
+                            id="img-inputer" style="display: none;" onchange="imageChange(event)" /></li>
+                </label>
+                <label for="btn-add-circle">
+                    <li class="btn">添加圆圈 <button id="btn-add-circle" style="display: none;"
+                            onclick="addCircle()"></button></li>
+                </label>
+                <!-- <label for="btn-add-rect">
+                    <li class="btn">添加矩形 <button id="btn-add-rect" style="display: none;"
+                            onclick="addRectangle()"></button>
+                    </li> -->
+                </label>
+                <label for="img-outputer">
+                    <li class="btn">导出图片 <button id="img-outputer" style="display: none;"
+                            onclick="outputImage()"></button></li>
+                </label>
+                <label for="obj-deleter">
+                    <li class="btn">删除对象 <button id="obj-deleter" style="display: none;"
+                            onclick="deleteObject()"></button></li>
+                </label>
+            </ul>
+        </div>
+        <div class="canvas" id="myContainer"></div>
+    </div>
+
+</body>
+<script src="https://cdn.jsdelivr.net/npm/p5@0.10.2/lib/p5.js"></script>
+<script src="sketch.js"></script>
+
+</html>

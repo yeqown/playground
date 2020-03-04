@@ -1,0 +1,6 @@
+version: '3'
+services:
+  discovery:
+    image: yeqown/bilibili-discovery
+    ports:
+      - 7171:7171
