@@ -24,3 +24,8 @@ data/
 xd/
 discovery
 target
+
+# python
+lib
+bin
+include
