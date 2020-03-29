@@ -13,6 +13,8 @@ The code and language features of practicing hands during the learning of `golan
 * go-docker
 * nsq
 * gorm
+* signleflight
+* mergego
 
 ## golang features
 

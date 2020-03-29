@@ -21,6 +21,7 @@ require (
 	github.com/golang/mock v1.4.1
 	github.com/golang/protobuf v1.3.2
 	github.com/gorilla/schema v1.1.0 // indirect
+	github.com/imdario/mergo v0.3.9
 	github.com/jinzhu/gorm v1.9.8
 	github.com/kataras/golog v0.0.10 // indirect
 	github.com/klauspost/compress v1.10.2 // indirect
@@ -33,6 +34,7 @@ require (
 	github.com/smallnest/weighted v0.0.0-20190919111400-6285d794850d
 	github.com/stretchr/testify v1.4.0
 	github.com/yeqown/infrastructure v0.3.3
+	golang.org/x/sync v0.0.0-20190423024810-112230192c58
 	google.golang.org/grpc v1.19.0
 	gopkg.in/src-d/go-billy.v4 v4.3.0 // indirect
 	gopkg.in/src-d/go-git-fixtures.v3 v3.5.0 // indirect

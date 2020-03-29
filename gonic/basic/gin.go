@@ -1,23 +1,27 @@
 package main
 
 import (
+	"log"
+
 	"github.com/gin-gonic/gin"
 )
 
-//post form-data a
 func main() {
 	r := gin.Default()
-	r.POST("/test", TestShoudbind)
+	r.GET("/test", TestShoudbind)
 	r.Run(":8080")
 }
 
 func TestShoudbind(c *gin.Context) {
-	a := A{}
-	c.ShouldBind(&a)
-	c.JSON(200, a)
+	header := c.GetHeader("X-Not")
+	log.Println("header=", header)
+
+	// a := A{}
+	// c.ShouldBind(&a)
+	c.JSON(200, gin.H{"messgae": "ok"})
 }
 
-type A struct {
-	B string `form:"b" json:"b"`
-	L A      `json:"l"`
-}
+// type A struct {
+// 	B string `form:"b" json:"b"`
+// 	L A      `json:"l"`
+// }
