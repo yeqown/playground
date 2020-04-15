@@ -1,0 +1,22 @@
+version: "3"
+services:
+  redis-master:
+    image: redis
+    container_name: redis-master
+    command: redis-server --port 6379
+    ports:
+      - "6379:6379"
+
+  redis-slave1:
+    image: redis
+    container_name: redis-slave-1
+    ports:
+      - "6380:6380"
+    command: redis-server --slaveof 192.168.132.122 6379 --port 6380
+
+  redis-slave2:
+    image: redis
+    container_name: redis-slave-2
+    ports:
+      - "6381:6381"
+    command: redis-server --slaveof 192.168.132.122 6379 --port 6381
