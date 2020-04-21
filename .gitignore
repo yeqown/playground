@@ -29,3 +29,8 @@ target
 lib
 bin
 include
+
+# c
+a.out
+client
+server
