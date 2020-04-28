@@ -2,10 +2,9 @@
 // Use of this source code is governed by a MIT-style
 // license that can be found in the LICENSE file.
 
-#include<iostream>
+#include <iostream>
 
-using namespace std;
-
-int main() {
-    cout << "Hello World" << endl;
+int main()
+{
+    std::cout << "Hello World" << std::endl;
 }
