@@ -4,7 +4,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
-#include <time.h>
+// #include <time.h>
 #include <unistd.h>
 
 // #include <sys/epoll.h>
@@ -12,134 +12,101 @@
 #include <netinet/in.h>
 #include <sys/socket.h>
 #include <sys/types.h>
+#include <errno.h>
+#include <err.h>
 #include <arpa/inet.h>
 
-#define MAXSIZE     1024
-#define IPADDRESS   "127.0.0.1"
-#define SERV_PORT   8787
-#define FDSIZE      1024
+#define MAXSIZE 1024
+#define IPADDRESS "127.0.0.1"
+#define SERV_PORT 8080
+#define FDSIZE 1024
 #define EPOLLEVENTS 20
 
-static void handle_connection(int sockfd);
-static void handle_events(int epollfd,struct epoll_event *events,int num,int sockfd,char *buf);
-static void do_read(int epollfd,int fd,int sockfd,char *buf);
-static void do_write(int epollfd,int fd,int sockfd,char *buf);
-static void add_event(int epollfd,int fd,int state);
-static void delete_event(int epollfd,int fd,int state);
-static void modify_event(int epollfd,int fd,int state);
+int dial(char *addr, int port);
+// void recv_loop(int kq);
 
-int main(int argc,char *argv[])
+int main()
 {
-    int                 sockfd;
-    struct sockaddr_in  servaddr;
-    sockfd = socket(AF_INET,SOCK_STREAM,0);
-    bzero(&servaddr,sizeof(servaddr));
-    servaddr.sin_family = AF_INET;
-    servaddr.sin_port = htons(SERV_PORT);
-    inet_pton(AF_INET,IPADDRESS, &servaddr.sin_addr);
-    connect(sockfd,(struct sockaddr*)&servaddr,sizeof(servaddr));
-    //处理连接
-    handle_connection(sockfd);
-    close(sockfd);
+    int client_fd = dial(IPADDRESS, SERV_PORT);
+    if (client_fd < 0)
+    {
+        fprintf(stderr, "dial failed\n");
+        return -1;
+    }
+    int kq = kqueue();
+    write(client_fd, "hello server", 32);
+
+    struct kevent evt;                                                    // 创建
+    EV_SET(&evt, client_fd, EVFILT_READ, EV_ADD | EV_ENABLE, 0, 0, NULL); // 赋值
+    int ret = kevent(kq, &evt, 1, NULL, 0, NULL);
+    if (ret == -1)
+    {
+        err(EXIT_FAILURE, "kevent register");
+    }
+    if (evt.flags & EV_ERROR)
+    {
+        errx(EXIT_FAILURE, "Event error: %s", strerror(evt.data));
+    }
+
+    char buf[MAXSIZE];
+    int n;
+    while (1)
+    {
+        ret = kevent(kq, &evt, 1, NULL, 0, NULL);
+        if (ret == -1)
+        {
+            err(EXIT_FAILURE, "kevent wait");
+        }
+        else if (ret > 0)
+        {
+            printf("Something was written");
+            n = read(client_fd, buf, MAXSIZE);
+            if (n <= 0)
+            {
+                close(client_fd);
+                return 0;
+            }
+            printf("client recv msg is:%s\n", buf);
+        }
+    }
+
     return 0;
 }
 
-
-static void handle_connection(int sockfd)
+// int dial(char *addr, int port)
+// ret = -1, means dial failed
+//     else means fd
+int dial(char *addr, int port)
 {
-    int epollfd;
-    struct epoll_event events[EPOLLEVENTS];
-    char buf[MAXSIZE];
-    int ret;
-    epollfd = epoll_create(FDSIZE);
-    add_event(epollfd,STDIN_FILENO,EPOLLIN);
-    for ( ; ; )
+    int fd = socket(AF_INET, SOCK_STREAM, 0);
+    if (fd == -1)
     {
-        ret = epoll_wait(epollfd,events,EPOLLEVENTS,-1);
-        handle_events(epollfd,events,ret,sockfd,buf);
+        fprintf(stderr, "create socket failed, errno=%d, reason=%s\n",
+                errno, strerror(errno));
+        return -1;
     }
-    close(epollfd);
+
+    struct sockaddr_in sockaddr;
+    bzero(&sockaddr, sizeof(sockaddr));
+    sockaddr.sin_family = AF_INET;
+    sockaddr.sin_port = htons(8080);
+    inet_pton(AF_INET, addr, &sockaddr.sin_addr);
+
+    int ret = connect(fd, (struct sockaddr *)&sockaddr, sizeof(sockaddr));
+    if (ret < 0)
+    {
+        fprintf(stderr, "connect failed, err=%s\n", strerror(errno));
+        return -1;
+    }
+
+    return fd;
 }
 
-static void handle_events(int epollfd,struct epoll_event *events,int num,int sockfd,char *buf)
-{
-    int fd;
-    int i;
-    for (i = 0;i < num;i++)
-    {
-        fd = events[i].data.fd;
-        if (events[i].events & EPOLLIN)
-            do_read(epollfd,fd,sockfd,buf);
-        else if (events[i].events & EPOLLOUT)
-            do_write(epollfd,fd,sockfd,buf);
-    }
-}
-
-static void do_read(int epollfd,int fd,int sockfd,char *buf)
-{
-    int nread;
-    nread = read(fd,buf,MAXSIZE);
-        if (nread == -1)
-    {
-        perror("read error:");
-        close(fd);
-    }
-    else if (nread == 0)
-    {
-        fprintf(stderr,"server close.\n");
-        close(fd);
-    }
-    else
-    {
-        if (fd == STDIN_FILENO)
-            add_event(epollfd,sockfd,EPOLLOUT);
-        else
-        {
-            delete_event(epollfd,sockfd,EPOLLIN);
-            add_event(epollfd,STDOUT_FILENO,EPOLLOUT);
-        }
-    }
-}
-
-static void do_write(int epollfd,int fd,int sockfd,char *buf)
-{
-    int nwrite;
-    nwrite = write(fd,buf,strlen(buf));
-    if (nwrite == -1)
-    {
-        perror("write error:");
-        close(fd);
-    }
-    else
-    {
-        if (fd == STDOUT_FILENO)
-            delete_event(epollfd,fd,EPOLLOUT);
-        else
-            modify_event(epollfd,fd,EPOLLIN);
-    }
-    memset(buf,0,MAXSIZE);
-}
-
-static void add_event(int epollfd,int fd,int state)
-{
-    struct epoll_event ev;
-    ev.events = state;
-    ev.data.fd = fd;
-    epoll_ctl(epollfd,EPOLL_CTL_ADD,fd,&ev);
-}
-
-static void delete_event(int epollfd,int fd,int state)
-{
-    struct epoll_event ev;
-    ev.events = state;
-    ev.data.fd = fd;
-    epoll_ctl(epollfd,EPOLL_CTL_DEL,fd,&ev);
-}
-
-static void modify_event(int epollfd,int fd,int state)
-{
-    struct epoll_event ev;
-    ev.events = state;
-    ev.data.fd = fd;
-    epoll_ctl(epollfd,EPOLL_CTL_MOD,fd,&ev);
-}
+// void recv_loop(int kq)
+// {
+//     int kq;
+//     while (1)
+//     {
+//         kq = kqueue();
+//     }
+// }

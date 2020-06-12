@@ -19,7 +19,7 @@
 #define max(a, b) (a > b) ? a : b
 
 static void do_write(int sockfd, char *buf);
-static void handle_connection(int sockfd);
+static void loop_write(int sockfd);
 
 int main(int argc, char *argv[])
 {
@@ -40,19 +40,18 @@ int main(int argc, char *argv[])
 
     printf("client send to server .\n");
     write(sockfd, "hello server", 32);
-    handle_connection(sockfd);
+    loop_write(sockfd);
 
     return 0;
 }
 
 static void do_write(int sockfd, char *buf)
 {
-    printf("client recv msg is:%s\n", buf);
     sleep(5);
     write(sockfd, buf, strlen(buf) + 1);
 }
 
-static void handle_connection(int sockfd)
+static void loop_write(int sockfd)
 {
     char sendline[MAXLINE], recvline[MAXLINE];
     int maxfdp, stdineof;
@@ -93,6 +92,7 @@ static void handle_connection(int sockfd)
                 FD_CLR(sockfd, &readfds);
                 return;
             }
+            printf("client recv msg is:%s\n", recvline);
             do_write(sockfd, recvline);
         }
     }

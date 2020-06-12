@@ -29,8 +29,11 @@ target
 lib
 bin
 include
+__pycache__/
 
 # c
 a.out
 client
 server
+.idea/
+debug.test
