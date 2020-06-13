@@ -6,6 +6,8 @@ import (
 	"strconv"
 	"strings"
 	"unicode"
+
+	"github.com/pkg/errors"
 )
 
 // opPriority ...
@@ -15,9 +17,15 @@ var opPriority = map[rune]int{
 	'(': 3, ')': 3,
 }
 
-func Calculate(expr string) float64 {
-	polishExpr := parseExprAsPolishV2(expr)
-	return calcWithPolish(polishExpr)
+// 从中缀表达式转后缀表达式子
+type ParseExprAsPolishFunc func(expr string) (string, error)
+
+func Calculate(expr string, fn ParseExprAsPolishFunc) (float64, error) {
+	polishExpr, err := fn(expr)
+	if err != nil {
+		return 0.0, errors.Wrap(err, "Calculate.ParseExprAsPolishFunc")
+	}
+	return calcWithPolish(polishExpr), nil
 }
 
 // calcWithPolish 根据后缀表达式求值
@@ -52,7 +60,8 @@ func calcWithPolish(polishExpr string) float64 {
 }
 
 // 从中缀表达式转后缀表达式子
-func parseExprAsPolishV2(expr string) string {
+// 支持浮点数和多位数
+func defaultParseExprAsPolish(expr string) (string, error) {
 	var output = make([]string, 0, 32)
 	var opStack = newStack()
 
@@ -136,9 +145,10 @@ func parseExprAsPolishV2(expr string) string {
 		output = append(output, string(r))
 	}
 
-	return strings.Join(output, ",")
+	return strings.Join(output, ","), nil
 }
 
+// if c (rune) is a char in ops return true
 func isOp(c rune) bool {
 	_, ok := opPriority[c]
 	return ok

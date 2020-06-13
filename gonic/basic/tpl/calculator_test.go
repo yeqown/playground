@@ -9,6 +9,7 @@ import (
 func Test_Calculate(t *testing.T) {
 	type args struct {
 		expr string
+		fn   ParseExprAsPolishFunc
 	}
 
 	tests := []struct {
@@ -20,6 +21,7 @@ func Test_Calculate(t *testing.T) {
 			name: "case 0",
 			args: args{
 				expr: "1 + ( ( 222 + 43 ) * 4 ) - 45",
+				fn: defaultParseExprAsPolish,
 			},
 			want: 1016,
 		},
@@ -27,13 +29,15 @@ func Test_Calculate(t *testing.T) {
 			name: "case 1",
 			args: args{
 				expr: "1 + 2*3.3 + (445 * 6 + 7) * 89.1",
+				fn: defaultParseExprAsPolish,
 			},
 			want: 238528.3,
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got := Calculate(tt.args.expr)
+			got, err := Calculate(tt.args.expr, tt.args.fn)
+			assert.Equal(t, nil, err)
 			assert.Equal(t, tt.want, got)
 		})
 	}
@@ -102,7 +106,8 @@ func Test_parseExprAsPolishV2(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got := parseExprAsPolishV2(tt.args.expr)
+			got, err := defaultParseExprAsPolish(tt.args.expr)
+			assert.Equal(t, nil, err)
 			assert.Equal(t, tt.want, got)
 		})
 	}
