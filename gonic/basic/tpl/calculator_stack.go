@@ -5,35 +5,35 @@ import (
 	"fmt"
 )
 
-// Stack ....
-type Stack struct {
+// stack ....
+type stack struct {
 	list *list.List
 }
 
 // newStack ...
-func newStack() *Stack {
+func newStack() *stack {
 	list := list.New()
-	return &Stack{list}
+	return &stack{list}
 }
 
 // Push method of stack
-func (stack *Stack) Push(value interface{}) {
-	stack.list.PushBack(value)
+func (s *stack) Push(value interface{}) {
+	s.list.PushBack(value)
 }
 
 // Pop method of stack
-func (stack *Stack) Pop() interface{} {
-	e := stack.list.Back()
+func (s *stack) Pop() interface{} {
+	e := s.list.Back()
 	if e != nil {
-		stack.list.Remove(e)
+		s.list.Remove(e)
 		return e.Value
 	}
 	return nil
 }
 
 // Peak method of stack
-func (stack *Stack) Peak() interface{} {
-	e := stack.list.Back()
+func (s *stack) Peak() interface{} {
+	e := s.list.Back()
 	if e != nil {
 		return e.Value
 	}
@@ -41,25 +41,36 @@ func (stack *Stack) Peak() interface{} {
 	return nil
 }
 
-// Len method of Stack
-func (stack *Stack) Len() int {
-	return stack.list.Len()
+// Len method of stack
+func (s *stack) Len() int {
+	return s.list.Len()
 }
 
-// Empty method of Stack
-func (stack *Stack) Empty() bool {
-	return stack.list.Len() == 0
+// Empty method of stack
+func (s *stack) Empty() bool {
+	return s.list.Len() == 0
 }
 
-// String method of Stack
-func (stack *Stack) String() (s string) {
-	elem := stack.list.Front()
+func runeHelper(s *stack) (format string) {
+	elem := s.list.Front()
 	if elem == nil {
-		return s
+		return
 	}
 	for elem != nil {
-		s += fmt.Sprintf("%v,", elem.Value)
+		format += fmt.Sprintf("%s,", string(elem.Value.(rune)))
 		elem = elem.Next()
 	}
-	return s
+	return
+}
+
+func float64Helper(s *stack) (format string) {
+	elem := s.list.Front()
+	if elem == nil {
+		return
+	}
+	for elem != nil {
+		format += fmt.Sprintf("%.2f,", elem.Value.(float64))
+		elem = elem.Next()
+	}
+	return
 }

@@ -3,63 +3,70 @@
 package tpl
 
 import (
-	"fmt"
 	"strconv"
 	"strings"
 	"unicode"
+
+	"github.com/pkg/errors"
 )
 
 // opPriority ...
 var opPriority = map[rune]int{
-	43: 1, // +
-	45: 1, // -
-	42: 2, // *
-	47: 2, // /
-	40: 3, // (
-	41: 3, // )
+	'+': 1, '-': 1,
+	'*': 2, '/': 2,
+	'(': 3, ')': 3,
 }
 
-func Calculate(expr string) float32 {
-	polishExpr := parseExprAsPolishV2(expr)
-	return calcWithPolish(polishExpr)
+// 从中缀表达式转后缀表达式子
+type ParseExprAsPolishFunc func(expr string) (string, error)
+
+func Calculate(expr string, fn ParseExprAsPolishFunc) (float64, error) {
+	polishExpr, err := fn(expr)
+	if err != nil {
+		return 0.0, errors.Wrap(err, "Calculate.ParseExprAsPolishFunc")
+	}
+	return calcWithPolish(polishExpr), nil
 }
 
-// calcWithPolish ...
-// TODO: 修改这部分
-func calcWithPolish(polishExpr string) float32 {
+// calcWithPolish 根据后缀表达式求值
+func calcWithPolish(polishExpr string) float64 {
 	outs := strings.Split(polishExpr, ",")
 	s := newStack()
 
-	for i := len(outs) - 1; i >= 0; i-- {
-		num, _ := strconv.ParseFloat(outs[i], 64)
-		if num < 0 {
-			// 操作符
-			num = 0 - num
-			switch rune(num) {
-			case '+':
-				s.Push(s.Pop().(int) + s.Pop().(int))
-			case '-':
-				s.Push(s.Pop().(int) - s.Pop().(int))
-			case '*':
-				s.Push(s.Pop().(int) * s.Pop().(int))
-			case '/':
-				s.Push(int(s.Pop().(int) / s.Pop().(int)))
-			default:
-				fmt.Printf("Error: invalid op = %v", num)
-			}
-		} else {
-			s.Push(int(num))
+	for _, v := range outs {
+		num, err := strconv.ParseFloat(v, 64)
+		if err == nil {
+			// true: 如果可以转成数字
+			s.Push(num)
+			continue
 		}
-	}
 
-	return s.Pop().(float32)
+		// fmt.Printf("计算前: stack=%s\n", float64Helper(s))
+		op1 := s.Pop().(float64)
+		op2 := s.Pop().(float64)
+		switch v {
+		case "+":
+			s.Push(op2 + op1)
+		case "-":
+			s.Push(op2 - op1)
+		case "*":
+			s.Push(op2 * op1)
+		case "/":
+			s.Push(op2 / op1)
+		}
+		// fmt.Printf("计算 %.2f %s %.2f: stack=%s\n", op1, v, op2, float64Helper(s))
+	}
+	return s.Pop().(float64)
 }
 
-func parseExprAsPolishV2(expr string) string {
+// 从中缀表达式转后缀表达式子
+// 支持浮点数和多位数
+func defaultParseExprAsPolish(expr string) (string, error) {
 	var output = make([]string, 0, 32)
 	var opStack = newStack()
 
 	var (
+		// 用于读取数值
 		preNum          string
 		flagNumContinue bool
 	)
@@ -95,33 +102,39 @@ func parseExprAsPolishV2(expr string) string {
 			flagNumContinue = false
 		}
 
+		// 操作符
 		if isOp(r) {
 			if r == ')' {
-				// 遇到 ')' 弹出栈，直到遇见'('
+				// 遇到 ')'则开始弹出 opStack，直到遇见'('
 				for !opStack.Empty() {
 					peak := opStack.Pop().(rune)
-					output = append(output, string(peak))
 					if peak == '(' {
 						break
 					}
+					output = append(output, string(peak))
 				}
+
+				// fmt.Printf("遇见 ')' 处理后 stack=%s\n", runeHelper(opStack))
 				continue
 			}
 
-			// output = append(output, string(r))
-			for !opStack.Empty() && isOpLower(r, opStack.Peak().(rune)) {
+			// 除了 ')' 以外的操作符，opStack 一直弹出直到 栈顶元素优先级 小于 当前操作符
+			for !opStack.Empty() && !isOpLower(opStack.Peak().(rune), r) {
 				// 栈不为空 且 栈顶元素优先级更高（或相等）
-				peak := opStack.Pop().(rune)
+				peak := opStack.Peak().(rune)
 				if peak == '(' {
 					break
 				}
+				opStack.Pop()
 				output = append(output, string(peak))
 			}
 			opStack.Push(r)
+			// fmt.Printf("遇见 '%s' 处理后，stack=%s\n", string(r), runeHelper(opStack))
 		}
 		// TODO: 不能处理的字符，忽略或者报错
 	}
 
+	// FIX: 以数字结尾的表达式
 	if flagNumContinue {
 		output = append(output, preNum)
 	}
@@ -132,41 +145,17 @@ func parseExprAsPolishV2(expr string) string {
 		output = append(output, string(r))
 	}
 
-	return strings.Join(output, ",")
+	return strings.Join(output, ","), nil
 }
 
-var (
-	_ops = map[rune]bool{
-		'+': true,
-		'-': true,
-		'*': true,
-		'/': true,
-		'(': true,
-		')': true,
-	}
-)
-
-//func isNumber(c rune) bool {
-//	_, ok := _numbers[c]
-//	return ok
-//}
-
+// if c (rune) is a char in ops return true
 func isOp(c rune) bool {
-	_, ok := _ops[c]
+	_, ok := opPriority[c]
 	return ok
 }
-
-//
-//func isParenthesis(c rune) bool {
-//	return c == '(' || c == ')'
-//}
-//
-//func isRightParenthesis(c rune) bool {
-//	return c == ')'
-//}
 
 // isOpLower means to do
 // return r1 < r2
 func isOpLower(r1, r2 rune) bool {
-	return opPriority[r1] <= opPriority[r2]
+	return opPriority[r1] < opPriority[r2]
 }
