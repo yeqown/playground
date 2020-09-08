@@ -18,7 +18,7 @@ func main() {
 	mux := http.NewServeMux()
 	mux.HandleFunc("/http2/std", func(w http.ResponseWriter, req *http.Request) {
 		w.WriteHeader(http.StatusOK)
-		w.Write([]byte("hello http2 standard"))
+		w.Write([]byte("codegen http2 standard"))
 	})
 
 	http2Srv := &http.Server{

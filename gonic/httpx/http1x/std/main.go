@@ -10,7 +10,7 @@ import (
 func main() {
 	http.HandleFunc("/http1x/std", func(w http.ResponseWriter, req *http.Request) {
 		w.WriteHeader(http.StatusOK)
-		w.Write([]byte("hello http1x standard"))
+		w.Write([]byte("codegen http1x standard"))
 	})
 
 	log.Println("/http1x/std is up on :8080")

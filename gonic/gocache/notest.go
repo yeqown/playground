@@ -1,1 +1,1 @@
-package bigcache
+package gocache

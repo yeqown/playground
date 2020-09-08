@@ -13,7 +13,7 @@ func main() {
 	r := gin.Default()
 
 	r.GET("/http1x/gin", func(c *gin.Context) {
-		c.String(http.StatusOK, "hello http1x gin framework")
+		c.String(http.StatusOK, "codegen http1x gin framework")
 	})
 
 	log.Println("/http1x/gin is up on :8080")

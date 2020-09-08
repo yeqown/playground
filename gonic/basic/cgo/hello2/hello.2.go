@@ -4,5 +4,5 @@ package main
 import "C"
 
 func main() {
-	C.sayHello(C.CString("hello cgo"))
+	C.sayHello(C.CString("codegen cgo"))
 }

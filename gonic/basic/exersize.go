@@ -121,7 +121,7 @@ func panic_test() {
 	int_chan := make(chan int, 1)
 	string_chan := make(chan string, 1)
 	int_chan <- 1
-	string_chan <- "hello"
+	string_chan <- "codegen"
 	// 随机选择
 	select {
 	case value := <-int_chan:

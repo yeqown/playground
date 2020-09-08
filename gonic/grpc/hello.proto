@@ -1,14 +1,26 @@
-syntax="proto3";
+syntax = "proto3";
 
-message EchoMessage {
-    string value = 1;
+// for Golang
+package hello;
+
+// go_package = "hello";
+
+service HelloService {
+    // This thing just says Hello to anyone
+    // SayHello('Euler') -> Hello, Euler!
+    rpc SayHello(HelloReq) returns (HelloResp) {};
+    // Strict Version responds only to requests which have `Name` length
+    // less than 10 characters
+    rpc SayHelloStrict(HelloReq) returns (HelloResp) {};
+
+    // this is a demo describes how to transfer ErrCode
+    rpc ErrorExample(HelloReq) returns (HelloResp) {};
 }
 
-service EchoService{
-    rpc Echo(EchoMessage) returns (EchoMessage){
-        option(google.api.http) = {
-            post: "/v1/echo"
-            body: "*"
-        };
-    }
+message HelloReq {
+    string Name = 1;
+}
+
+message HelloResp {
+    string Result = 1;
 }
