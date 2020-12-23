@@ -11,10 +11,10 @@ import (
 
 type customTypeIds []uint32
 
-// FIXME: could not be saved into database
-func (c *customTypeIds) Value() (driver.Value, error) {
+// FIXED: could not be saved into database. should use correct receiver
+func (c customTypeIds) Value() (driver.Value, error) {
 	byts, err := json.Marshal(c)
-	return string(byts), err
+	return byts, err
 }
 
 func (c *customTypeIds) Scan(src interface{}) error {
@@ -31,7 +31,7 @@ func (c *customTypeIds) Scan(src interface{}) error {
 type withCustomTypeModel struct {
 	gorm2.Model
 
-	Ids customTypeIds `gorm:"column:ids"`
+	Ids customTypeIds `gorm:"column:ids;type:TEXT"`
 }
 
 func (w withCustomTypeModel) TableName() string {
