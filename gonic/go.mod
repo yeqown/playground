@@ -1,6 +1,7 @@
 module github.com/playground/gonic
 
 require (
+	github.com/Shopify/sarama v1.19.0
 	github.com/allegro/bigcache v1.2.1
 	github.com/casbin/casbin v1.9.1
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible
@@ -14,6 +15,7 @@ require (
 	github.com/golang/mock v1.4.3
 	github.com/golang/protobuf v1.4.2
 	github.com/jinzhu/gorm v1.9.8
+	github.com/labstack/gommon v0.3.0
 	github.com/mxk/go-sqlite v0.0.0-20140611214908-167da9432e1f
 	github.com/pkg/errors v0.8.1
 	github.com/prometheus/client_golang v1.6.0
@@ -25,13 +27,14 @@ require (
 	golang.org/x/sync v0.0.0-20190911185100-cd5d95a43a6e
 	golang.org/x/sys v0.0.0-20200625212154-ddb9806d33ae // indirect
 	golang.org/x/text v0.3.3 // indirect
-	golang.org/x/tools v0.0.0-20190606124116-d0a3d012864b
 	google.golang.org/genproto v0.0.0-20200626011028-ee7919e894b5 // indirect
 	google.golang.org/grpc v1.30.0
 	google.golang.org/protobuf v1.25.0
 	gopkg.in/src-d/go-billy.v4 v4.3.0 // indirect
 	gopkg.in/src-d/go-git-fixtures.v3 v3.5.0 // indirect
 	gopkg.in/src-d/go-git.v4 v4.11.0
+	gorm.io/driver/sqlite v1.1.4
+	gorm.io/gorm v1.20.8
 )
 
 go 1.13

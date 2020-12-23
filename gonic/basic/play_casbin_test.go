@@ -1,9 +1,10 @@
-package gonic_test
+package main_test
 
 import (
 	"testing"
 
 	"github.com/casbin/casbin"
+	casbinadpter "github.com/casbin/casbin/persist"
 )
 
 var (

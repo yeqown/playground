@@ -1,4 +1,4 @@
-package gonic_test
+package main_test
 
 import (
 	"math/rand"
