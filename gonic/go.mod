@@ -15,7 +15,6 @@ require (
 	github.com/golang/mock v1.4.3
 	github.com/golang/protobuf v1.4.2
 	github.com/jinzhu/gorm v1.9.8
-	github.com/labstack/gommon v0.3.0
 	github.com/mxk/go-sqlite v0.0.0-20140611214908-167da9432e1f
 	github.com/pkg/errors v0.8.1
 	github.com/prometheus/client_golang v1.6.0
