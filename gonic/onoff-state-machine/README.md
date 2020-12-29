@@ -1,7 +1,11 @@
 ## Online or offline state machine
 
-to judge online or offline state by the sequence of event. event includes: 
-`enter` and `leave`. state includes `online` and `offline`.
+To judge online or offline state of client by sequences of event, here provide a state machine to indicate 
+how the state transition `between` online and `offline`. 
+
+Event includes: `enter` and `leave`. 
+
+State includes `online` and `offline`.
 
 For example (sequences):
 
@@ -12,3 +16,5 @@ For example (sequences):
 * `E1 E2 L2 E3 L1` as ONLINE
 * `E1 E2 L2 E3 L3 L1` as OFFLINE
 * `E1 E2 L2 E3 L1 L3` as OFFLINE
+
+![state-machine](./state-machine.png)
