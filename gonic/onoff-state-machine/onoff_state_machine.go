@@ -1,10 +1,16 @@
 package onoff
 
+import "strconv"
+
 type (
 	evtTyp int8
 
 	state int8
 )
+
+func (s state) String() string {
+	return strconv.Itoa(int(s))
+}
 
 const (
 	_ONLINE  state = 1

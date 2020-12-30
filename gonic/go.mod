@@ -18,6 +18,7 @@ require (
 	github.com/mxk/go-sqlite v0.0.0-20140611214908-167da9432e1f
 	github.com/pkg/errors v0.8.1
 	github.com/prometheus/client_golang v1.6.0
+	github.com/qmuntal/stateless v1.1.5
 	github.com/smallnest/weighted v0.0.0-20190919111400-6285d794850d
 	github.com/speps/go-hashids v2.0.0+incompatible
 	github.com/stretchr/testify v1.4.0
