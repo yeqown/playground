@@ -10,7 +10,7 @@ require (
 	github.com/gin-contrib/static v0.0.0-20191128031702-f81c604d8ac2
 	github.com/gin-gonic/gin v1.6.3
 	github.com/go-redis/redis/v7 v7.0.0-beta.4
-	github.com/go-sql-driver/mysql v1.4.1
+	github.com/go-sql-driver/mysql v1.5.0
 	github.com/gogo/protobuf v1.2.1
 	github.com/golang/mock v1.4.3
 	github.com/golang/protobuf v1.4.2
@@ -23,6 +23,7 @@ require (
 	github.com/speps/go-hashids v2.0.0+incompatible
 	github.com/stretchr/testify v1.4.0
 	github.com/yeqown/infrastructure v0.3.3
+	go.etcd.io/etcd v0.0.0-20181022230727-86b933311d23
 	golang.org/x/net v0.0.0-20200625001655-4c5254603344
 	golang.org/x/sync v0.0.0-20190911185100-cd5d95a43a6e
 	golang.org/x/sys v0.0.0-20200625212154-ddb9806d33ae // indirect
@@ -33,8 +34,9 @@ require (
 	gopkg.in/src-d/go-billy.v4 v4.3.0 // indirect
 	gopkg.in/src-d/go-git-fixtures.v3 v3.5.0 // indirect
 	gopkg.in/src-d/go-git.v4 v4.11.0
+	gorm.io/driver/mysql v1.0.4
 	gorm.io/driver/sqlite v1.1.4
-	gorm.io/gorm v1.20.8
+	gorm.io/gorm v1.20.12
 )
 
 go 1.13

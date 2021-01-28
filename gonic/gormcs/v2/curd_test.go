@@ -3,12 +3,11 @@ package v2
 import (
 	"testing"
 
-	"gorm.io/gorm/clause"
-
 	"github.com/playground/gonic/gormcs"
 
 	"github.com/stretchr/testify/suite"
 	gorm2 "gorm.io/gorm"
+	"gorm.io/gorm/clause"
 )
 
 func TestRunAll(t *testing.T) {

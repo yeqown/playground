@@ -4,10 +4,9 @@ import (
 	"os"
 	"time"
 
-	"github.com/stretchr/testify/suite"
-
 	"github.com/playground/gonic/gormcs"
 
+	"github.com/stretchr/testify/suite"
 	"gorm.io/driver/sqlite"
 	gorm2 "gorm.io/gorm"
 )
