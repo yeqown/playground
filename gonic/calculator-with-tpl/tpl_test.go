@@ -1,4 +1,4 @@
-package tpl
+package calculator_with_tpl
 
 import (
 	"strings"

@@ -1,6 +1,6 @@
 // https://blog.csdn.net/ssjhust123/article/details/8001651
 
-package tpl
+package calculator_with_tpl
 
 import (
 	"strconv"

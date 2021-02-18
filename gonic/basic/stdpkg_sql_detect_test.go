@@ -1,9 +1,10 @@
-package main
+package basic_test
 
 import (
 	"database/sql"
 	"fmt"
 	"sync"
+	"testing"
 	"time"
 
 	_ "github.com/go-sql-driver/mysql"
@@ -48,7 +49,7 @@ func MysqlSwitch() {
 	}
 }
 
-func main() {
+func Test_SQL_detect(t *testing.T) {
 	c := make(chan bool)
 
 	db, _ = sql.Open("mysql", "yeqiang:yeqiang@/test_yeqiang")

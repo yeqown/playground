@@ -1,7 +1,8 @@
-package main
+package basic_test
 
 import (
 	"fmt"
+	"testing"
 	"time"
 )
 
@@ -18,7 +19,7 @@ func (w *Worker) Work(jobs <-chan int, results chan<- int) {
 	}
 }
 
-func main() {
+func Test_channel(t *testing.T) {
 	jobs := make(chan int, 10)
 	results := make(chan int, 20)
 	workers := make([]Worker, 3)

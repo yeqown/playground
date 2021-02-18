@@ -1,10 +1,10 @@
-package main_test
+package basic_test
 
 import (
 	"testing"
 
 	"github.com/casbin/casbin"
-	casbinadpter "github.com/casbin/casbin/persist"
+	mysqladpter "github.com/casbin/mysql-adapter"
 )
 
 var (
@@ -33,7 +33,7 @@ func Test_CasbinACL(t *testing.T) {
 	obj := "data1" // the resource that is going to be accessed.
 	act := "read"  // the operation that the user performs on the resource.
 
-	a := casbinadpter.NewDBAdapter()
+	a := mysqladpter.NewAdapter("mysql", "root:@tcp(127.0.0.1:3306)/")
 	m := casbin.NewModel(casbinModelACL)
 	e := casbin.NewEnforcer(m, a)
 

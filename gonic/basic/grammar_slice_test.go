@@ -1,7 +1,8 @@
-package main
+package basic_test
 
 import (
 	"fmt"
+	"testing"
 )
 
 /*
@@ -10,7 +11,7 @@ import (
  但是如果传递的slice的capcity > length，那么append的值也会修改原slice（这是由于slice是基于数组的）
 */
 
-func main() {
+func Test_slice(t *testing.T) {
 	s := make([]int, 10, 10)
 	s2 := make([]int, 10, 20)
 

@@ -1,6 +1,7 @@
-package main
+package basic_test
 
 import (
+	"testing"
 	"time"
 )
 
@@ -11,7 +12,7 @@ import (
 // GODEBUG=gctrace=1 go run main.go -> gc.out
 //
 // build an app always malloc memory and release them
-func main() {
+func Test_Runtime_GC(t *testing.T) {
 	var cnt int
 
 	for {

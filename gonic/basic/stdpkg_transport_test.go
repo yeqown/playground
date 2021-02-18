@@ -1,9 +1,10 @@
-package main
+package basic_test
 
 import (
 	"fmt"
 	"net/http"
 	"os"
+	"testing"
 	"time"
 )
 
@@ -32,7 +33,7 @@ func createHTTPClient() *http.Client {
 }
 
 // HOW TO WATCH TCP CONNECTIONS of this application
-func main() {
+func Test_transport(t *testing.T) {
 	fmt.Println("PID=", os.Getpid())
 
 	// wait for observer ready

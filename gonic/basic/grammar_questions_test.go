@@ -1,25 +1,13 @@
-package main
+package basic_test
 
 import (
 	"fmt"
 	"runtime"
 	"sync"
+	"testing"
 )
 
-func main() {
-	// defer_call()
-	// parse_student()
-
-	runtime_question()
-
-	// derived()
-	// panic_test()
-	// defer_calc()
-	// append_make()
-	// tst_interface()
-}
-
-func defer_call() {
+func Test_deferCall(t *testing.T) {
 	defer func() { fmt.Println("打印前") }()
 	defer func() { fmt.Println("打印中") }()
 	defer func() { fmt.Println("打印后") }()
@@ -44,7 +32,7 @@ type student struct {
 	Name string
 }
 
-func parse_student() {
+func Test_parseStudent(t *testing.T) {
 	m := make(map[string]*student)
 	stus := []student{
 		{Name: "zhou", Age: 24},
@@ -60,7 +48,7 @@ func parse_student() {
 	}
 }
 
-func runtime_question() {
+func Test_runtimeQuestion(t *testing.T) {
 	// 这个还不清楚
 	runtime.GOMAXPROCS(1)
 	wg := sync.WaitGroup{}
@@ -102,10 +90,10 @@ func (t *Teacher) ShowB() {
 	fmt.Println("teacher showB")
 }
 
-func derived() {
-	t := Teacher{}
-	t.ShowA()
-	t.showO()
+func Test_derived(t *testing.T) {
+	t2 := Teacher{}
+	t2.ShowA()
+	t2.showO()
 
 	// output:
 	// showA
@@ -116,7 +104,7 @@ func derived() {
 	// 类似于继承，调用
 }
 
-func panic_test() {
+func Test_panicTest(t *testing.T) {
 	runtime.GOMAXPROCS(1)
 	int_chan := make(chan int, 1)
 	string_chan := make(chan string, 1)
@@ -137,7 +125,7 @@ func calc(index string, a, b int) int {
 	return ret
 }
 
-func defer_calc() {
+func Test_deferCalc(t *testing.T) {
 	// defer 是把执行的函数计算好，然后放到先入后出的队列中
 	a := 1
 	b := 2
@@ -149,7 +137,7 @@ func defer_calc() {
 }
 
 // 有语法错误吗？输出结果是啥。。。？
-func append_make() {
+func Test_appendMake(t *testing.T) {
 	s := make([]int, 5)
 	arr := []int{1, 2, 3}
 	s = append(s, arr...)
@@ -171,7 +159,7 @@ func (stu *Student) Speak(think string) (talk string) {
 	return
 }
 
-func tst_interface() {
+func Test_interfaceTest(t *testing.T) {
 	var peo Student = Student{}
 	think := "bitch"
 	fmt.Println(peo.Speak(think))

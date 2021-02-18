@@ -1,13 +1,14 @@
-package main
+package basic_test
 
 import (
 	"encoding/json"
 	"fmt"
 	"reflect"
 	"strings"
+	"testing"
 )
 
-func main() {
+func Test_ignore_omitempty(t *testing.T) {
 	var a = &Page{
 		A: 0,
 		B: "",

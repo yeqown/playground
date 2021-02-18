@@ -1,13 +1,14 @@
-package main
+package basic_test
 
 import (
 	"crypto/rc4"
 	"encoding/hex"
 	"fmt"
 	"log"
+	"testing"
 )
 
-func main() {
+func Test_RC4(t *testing.T) {
 	cipher, err := rc4.NewCipher([]byte("thisiskey"))
 	if err != nil {
 		log.Fatalf("wrong with NewCipher: %v", err)
