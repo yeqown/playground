@@ -11,7 +11,7 @@ func worker(secs int) (code int) {
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second*2)
 	defer cancel()
 
-	done := make(chan bool)
+	done := make(chan struct{})
 	// go func(ctx context.Context) {
 	// 	defer fmt.Println("go func defer called")
 	// 	fmt.Println("go func statring")
@@ -31,15 +31,23 @@ func worker(secs int) (code int) {
 
 	// type2
 	go func(ctx context.Context) {
+		defer func() {
+			if v := recover(); v != nil {
+				fmt.Println("paniced")
+			}
+		}()
+
 		select {
 		case <-ctx.Done():
 			return
 		default:
 			time.Sleep(time.Duration(secs) * time.Second)
-			done <- true
+			done <- struct{}{}
 		}
 	}(ctx)
 
+	// will panic ? [paniced]
+	defer close(done)
 	// awaiting
 	select {
 	case <-done:
@@ -47,7 +55,6 @@ func worker(secs int) (code int) {
 		code = 0
 	case <-ctx.Done():
 		code = -1
-		fmt.Println("timeout")
 	}
 
 	return
@@ -62,7 +69,6 @@ func Test_Worker_context(t *testing.T) {
 		args     args
 		wantCode int
 	}{
-		// TODO: Add test cases.
 		{name: "case 1", args: args{secs: 3}, wantCode: -1},
 		{name: "case 2", args: args{secs: 1}, wantCode: 0},
 	}
@@ -73,4 +79,7 @@ func Test_Worker_context(t *testing.T) {
 			}
 		})
 	}
+
+	// sleep some seconds, wait for standard console output.
+	time.Sleep(5 *time.Second)
 }
