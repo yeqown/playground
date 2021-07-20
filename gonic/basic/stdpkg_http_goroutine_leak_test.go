@@ -1,4 +1,4 @@
-package basic
+package basic_test
 
 import (
 	"fmt"

@@ -1,4 +1,4 @@
-package basic
+package basic_test
 
 import (
 	"context"
@@ -81,5 +81,5 @@ func Test_Worker_context(t *testing.T) {
 	}
 
 	// sleep some seconds, wait for standard console output.
-	time.Sleep(5 *time.Second)
+	time.Sleep(5 * time.Second)
 }
