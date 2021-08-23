@@ -20,6 +20,7 @@ require (
 	github.com/jinzhu/gorm v1.9.8
 	github.com/mxk/go-sqlite v0.0.0-20140611214908-167da9432e1f
 	github.com/opentracing/opentracing-go v1.2.0
+	github.com/philchia/agollo/v4 v4.1.3 // indirect
 	github.com/pkg/errors v0.8.1
 	github.com/prometheus/client_golang v1.6.0
 	github.com/qmuntal/stateless v1.1.5
