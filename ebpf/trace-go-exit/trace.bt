@@ -1,0 +1,14 @@
+uprobe:./binary:runtime.gopanic
+{
+    printf("panic called with stack %s", ustack(perf));
+}
+
+uprobe:./binary:os.Exit
+{
+    printf("os.Exit called with stack: %s", ustack(perf, 5));
+}
+
+/*uprobe:./binary:runtime.exit*/
+/*{*/
+/*    printf("runtime.exit called with stack: %s", ustack(perf));*/
+/*}*/
