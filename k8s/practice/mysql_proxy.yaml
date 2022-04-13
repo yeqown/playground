@@ -1,0 +1,47 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata: 
+  labels:
+    app: mysql-helper
+    notPublic: "true"
+  name: mysql-helper
+  namespace: app
+spec: 
+  replicas: 1
+  selector: 
+    matchLabels:
+      app: mysql-helper
+      notPublic: "true"
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+    type: "RollingUpdate"
+  template:
+    metadata: 
+      labels:
+        app: mysql-helper
+        notPublic: "true"
+    spec:
+      imagePullSecrets:
+        - name: regsecret
+      nodeSelector:
+        group: app
+      volumes:
+        - name: log
+          emptyDir: {}
+      containers:
+      - name: mysql-helper
+        # TODO(@yeqown): replace image URL
+        image: "docker.io/yeqown/mysql-helper:latest"
+        imagePullPolicy: "Always"
+        ports:
+          - protocol: TCP
+            containerPort: 3306
+        command:
+          - ncat
+          - --sh-exec
+          - ncat 10.47.95.37 3306
+          - -l
+          - "3306"
+          - --keep-open
