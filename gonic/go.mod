@@ -13,7 +13,7 @@ require (
 	github.com/go-redis/redis v6.15.2+incompatible
 	github.com/go-redis/redis/v7 v7.0.0-beta.4
 	github.com/go-sql-driver/mysql v1.5.0
-	github.com/gogo/protobuf v1.2.1
+	github.com/gogo/protobuf v1.3.2
 	github.com/golang/mock v1.4.3
 	github.com/golang/protobuf v1.4.3
 	github.com/golang/snappy v0.0.3 // indirect
@@ -30,7 +30,7 @@ require (
 	github.com/yeqown/infrastructure v0.3.3
 	golang.org/x/crypto v0.0.0-20210513164829-c07d793c2f9a // indirect
 	golang.org/x/net v0.0.0-20210510120150-4163338589ed
-	golang.org/x/sync v0.0.0-20190911185100-cd5d95a43a6e
+	golang.org/x/sync v0.0.0-20201020160332-67f06af15bc9
 	golang.org/x/sys v0.0.0-20210514084401-e8d321eab015 // indirect
 	google.golang.org/genproto v0.0.0-20201102152239-715cce707fb0
 	google.golang.org/grpc v1.33.2
