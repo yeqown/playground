@@ -3,6 +3,7 @@
 // license that can be found in the LICENSE file.
 
 #include<stdlib.h>
+#include<stdio.h>
 
 int main() {
     printf("hello world\n");

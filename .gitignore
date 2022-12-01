@@ -38,3 +38,5 @@ server
 .idea/
 debug.test
 app
+main
+cmake-build-debug/
