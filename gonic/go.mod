@@ -9,7 +9,7 @@ require (
 	github.com/eclipse/paho.mqtt.golang v1.2.0
 	github.com/eko/gocache v1.0.0
 	github.com/gin-contrib/static v0.0.0-20191128031702-f81c604d8ac2
-	github.com/gin-gonic/gin v1.7.0
+	github.com/gin-gonic/gin v1.7.7
 	github.com/go-redis/redis v6.15.2+incompatible
 	github.com/go-redis/redis/v7 v7.0.0-beta.4
 	github.com/go-sql-driver/mysql v1.5.0
