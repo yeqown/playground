@@ -22,8 +22,8 @@ require (
 	github.com/jinzhu/gorm v1.9.8
 	github.com/mxk/go-sqlite v0.0.0-20140611214908-167da9432e1f
 	github.com/opentracing/opentracing-go v1.2.0
-	github.com/pkg/errors v0.8.1
-	github.com/prometheus/client_golang v1.6.0
+	github.com/pkg/errors v0.9.1
+	github.com/prometheus/client_golang v1.11.1
 	github.com/qmuntal/stateless v1.1.5
 	github.com/smallnest/weighted v0.0.0-20190919111400-6285d794850d
 	github.com/speps/go-hashids v2.0.0+incompatible
@@ -31,11 +31,10 @@ require (
 	github.com/yeqown/infrastructure v0.3.3
 	golang.org/x/crypto v0.0.0-20210513164829-c07d793c2f9a // indirect
 	golang.org/x/net v0.0.0-20210510120150-4163338589ed
-	golang.org/x/sync v0.0.0-20190911185100-cd5d95a43a6e
-	golang.org/x/sys v0.0.0-20210514084401-e8d321eab015 // indirect
+	golang.org/x/sync v0.0.0-20201207232520-09787c993a3a
 	google.golang.org/genproto v0.0.0-20201102152239-715cce707fb0
 	google.golang.org/grpc v1.33.2
-	google.golang.org/protobuf v1.25.0
+	google.golang.org/protobuf v1.26.0-rc.1
 	gopkg.in/src-d/go-billy.v4 v4.3.0 // indirect
 	gopkg.in/src-d/go-git-fixtures.v3 v3.5.0 // indirect
 	gopkg.in/src-d/go-git.v4 v4.11.0
