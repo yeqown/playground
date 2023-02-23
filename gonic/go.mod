@@ -5,6 +5,7 @@ require (
 	github.com/allegro/bigcache v1.2.1
 	github.com/casbin/casbin v1.9.1
 	github.com/casbin/mysql-adapter v0.0.0-20170721055345-c494d0c4c842
+	github.com/cloudflare/tableflip v1.2.3
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible
 	github.com/eclipse/paho.mqtt.golang v1.2.0
 	github.com/eko/gocache v1.0.0
