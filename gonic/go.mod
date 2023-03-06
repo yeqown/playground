@@ -29,10 +29,8 @@ require (
 	github.com/speps/go-hashids v2.0.0+incompatible
 	github.com/stretchr/testify v1.5.1
 	github.com/yeqown/infrastructure v0.3.3
-	golang.org/x/crypto v0.0.0-20210513164829-c07d793c2f9a // indirect
-	golang.org/x/net v0.0.0-20210510120150-4163338589ed
-	golang.org/x/sync v0.0.0-20190911185100-cd5d95a43a6e
-	golang.org/x/sys v0.0.0-20210514084401-e8d321eab015 // indirect
+	golang.org/x/net v0.7.0
+	golang.org/x/sync v0.0.0-20220722155255-886fb9371eb4
 	google.golang.org/genproto v0.0.0-20201102152239-715cce707fb0
 	google.golang.org/grpc v1.33.2
 	google.golang.org/protobuf v1.25.0
