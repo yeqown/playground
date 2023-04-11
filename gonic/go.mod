@@ -21,6 +21,7 @@ require (
 	github.com/google/cel-go v0.7.3
 	github.com/jinzhu/gorm v1.9.8
 	github.com/mxk/go-sqlite v0.0.0-20140611214908-167da9432e1f
+	github.com/nxadm/tail v1.4.8
 	github.com/opentracing/opentracing-go v1.2.0
 	github.com/pkg/errors v0.8.1
 	github.com/prometheus/client_golang v1.6.0
