@@ -1,0 +1,38 @@
+syntax = "proto3";
+
+package helloworld.v1;
+
+import "google/api/annotations.proto";
+import "openapi.v3"
+
+option go_package = "github.com/yeoqwn/playground/openapi/helloword;helloworldpb";
+
+
+option(openapi.v3.document) = {
+  openapi: "3.0.0"
+  info: {
+    title: "Greeter"
+    version: "1.0.0"
+  }
+}
+
+
+// The greeting service definition.
+service Greeter {
+  // Sends a greeting
+  rpc SayHello (HelloRequest) returns (HelloReply) {
+    option (google.api.http) = {
+      get: "/helloworld/{name}"
+    };
+  }
+}
+
+// The request message containing the user's name.
+message HelloRequest {
+  string name = 1;
+}
+
+// The response message containing the greetings
+message HelloReply {
+  string message = 1;
+}
