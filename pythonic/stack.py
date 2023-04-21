@@ -7,6 +7,9 @@ from time import sleep
 
 
 class Stack(object):
+    """
+    用数组实现栈, push,pop O(1)时间复杂度取min,max值
+    """
 
     def __init__(self):
         self._data = []
@@ -61,30 +64,22 @@ class Stack(object):
     def max(self):
         return self._max
 
-
-def test_push():
-
+def test_Stack():
     s = Stack()
-
     for i in range(0, 100):
         item = randint(1, 67)
         print("Push item: {}".format(item))
         s.push(item)
-        print("Current Max: {max}, SecondMax: {}, Min: {min} SecondMin".format(
-            max=s.max, min=s.min))
+        print("Current Max: {max}, SecondMax: {second_max}, Min: {min} SecondMin: {second_min}".format(
+            max=s.max, second_max=s._second_max, min=s.min, second_min=s._second_min))
         sleep(1)
-
-
-def test_pop():
-
-    s = Stack()
-    action = lambda e: s.push(randint(2, 999))
-    # push data into Stack
-    _ = [action for i in range(100)]
-    # test Stack.pop() method, how to keep min and max
+    
     for _ in range(100):
         item = s.pop()
         print(item)
+    
+    print("Current Max: {max}, SecondMax: {second_max}, Min: {min} SecondMin: {second_min}".format(
+            max=s.max, second_max=s._second_max, min=s.min, second_min=s._second_min))
 
-
-test_push()
+if __name__ == '__main__':
+    test_Stack()
