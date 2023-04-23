@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8" />
+    <title>File Upload</title>
+</head>
+<body>
+<form enctype="multipart/form-data" id="upload-form">
+    <input type="file" id="file-input" />
+    <input type="button" value="Upload" onclick="upload()" />
+</form>
+<script>
+      // 定义分片大小 5MB
+      const CHUNK_SIZE = 5 * 1024 * 1024;
+
+      // 分片上传函数
+      function uploadChunk(file, start, end, chunkIndex) {
+        return new Promise((resolve, reject) => {
+          const xhr = new XMLHttpRequest();
+          xhr.open("POST", "/upload");
+          // xhr.setRequestHeader("Content-Type", "multipart/form-data");
+
+          // 构建分片表单数据
+          const formData = new FormData();
+          formData.append("file", file.slice(start, end));
+          formData.append("filename", file.name);
+          formData.append("size", file.size);
+          formData.append("chunknum", Math.ceil(file.size / CHUNK_SIZE));
+          formData.append("chunkindex", chunkIndex);
+
+          console.log(`Uploading chunk ${chunkIndex}...`)
+          console.log(`Start: ${start}, End: ${end} `)
+          console.log(`Chunk size: ${end - start} `)
+          console.log(`Total size: ${file.size} `)
+          console.log(`Chunk number: ${Math.ceil(file.size / CHUNK_SIZE)} `);
+
+          // 上传分片
+          xhr.onload = () => {
+            if (xhr.status >= 200 && xhr.status < 300) {
+              resolve();
+            } else {
+              reject();
+            }
+          };
+          xhr.onerror = () => reject();
+          xhr.send(formData);
+        });
+      }
+
+      // 整个文件上传函数
+      async function upload() {
+        const fileInput = document.getElementById("file-input");
+        const file = fileInput.files[0];
+        const chunkNum = Math.ceil(file.size / CHUNK_SIZE);
+
+        // 上传每个分片
+        for (let i = 1; i <= chunkNum; i++) {
+          const start = (i - 1) * CHUNK_SIZE;
+          const end = i * CHUNK_SIZE;
+
+          try {
+            await uploadChunk(file, start, end, i);
+          } catch (error) {
+            console.log(`Upload failed. please try chunk ${i} again.`, error);
+            // TODO: 增加重试逻辑
+          }
+        }
+
+        // 上传完成后提示上传成功
+        window.alert('上传成功！');
+      }
+    </script>
+</body>
+</html>

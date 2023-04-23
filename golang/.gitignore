@@ -3,3 +3,5 @@ testdata/
 log/
 .idea/
 .vscode/
+/file-server/upload-files/*
+/file-server/upload-temp/*

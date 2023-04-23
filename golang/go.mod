@@ -94,6 +94,6 @@ require (
 	gopkg.in/yaml.v2 v2.2.8 // indirect
 )
 
-go 1.20
+go 1.18
 
 replace github.com/agiledragon/gomonkey/v2 v2.9.0 => ../../gomonkey
