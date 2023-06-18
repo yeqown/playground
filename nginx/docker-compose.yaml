@@ -1,0 +1,14 @@
+# This is a docker-compose yaml file for the following services:
+# - nginx, mount conf.d and lua files
+
+version: '3.7'
+
+services:
+  nginx:
+    image: openresty/openresty:latest
+    ports:
+      - "8080:80"
+      - "8081:81"
+    volumes:
+      - ./conf.d:/etc/nginx/conf.d
+      - ./lua:/etc/nginx/lua
