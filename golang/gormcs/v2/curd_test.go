@@ -3,7 +3,7 @@ package v2
 import (
 	"testing"
 
-	"github.com/playground/gonic/gormcs"
+	"github.com/playground/golang/gormcs"
 
 	"github.com/stretchr/testify/suite"
 	gorm2 "gorm.io/gorm"

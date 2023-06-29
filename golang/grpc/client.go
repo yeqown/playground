@@ -4,12 +4,12 @@ import (
 	"fmt"
 	"log"
 
-	errorhandling "github.com/playground/gonic/grpc/error-handling"
+	errorhandling "github.com/playground/golang/grpc/error-handling"
 
 	"golang.org/x/net/context"
 	"google.golang.org/grpc"
 
-	pb "github.com/playground/gonic/grpc/codegen"
+	pb "github.com/playground/golang/grpc/codegen"
 )
 
 //

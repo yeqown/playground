@@ -8,7 +8,7 @@ import (
 	"os"
 	"time"
 
-	"github.com/playground/gonic/gormcs"
+	"github.com/playground/golang/gormcs"
 	gorm2 "gorm.io/gorm"
 
 	"gorm.io/gorm/logger"

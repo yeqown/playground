@@ -4,7 +4,7 @@ import (
 	"os"
 	"time"
 
-	"github.com/playground/gonic/gormcs"
+	"github.com/playground/golang/gormcs"
 
 	"github.com/stretchr/testify/suite"
 	"gorm.io/driver/sqlite"

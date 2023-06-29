@@ -3,7 +3,7 @@ package v2
 import (
 	"context"
 
-	"github.com/playground/gonic/gormcs"
+	"github.com/playground/golang/gormcs"
 
 	"github.com/opentracing/opentracing-go"
 	gorm2 "gorm.io/gorm"

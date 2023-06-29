@@ -1,4 +1,4 @@
-module github.com/playground/gonic
+module github.com/playground/golang
 
 require (
 	github.com/Shopify/sarama v1.19.0
@@ -29,6 +29,7 @@ require (
 	github.com/smallnest/weighted v0.0.0-20190919111400-6285d794850d
 	github.com/speps/go-hashids v2.0.0+incompatible
 	github.com/stretchr/testify v1.5.1
+	github.com/syndtr/goleveldb v1.0.0
 	github.com/yeqown/infrastructure v0.3.3
 	golang.org/x/net v0.0.0-20210610124326-52da8fb2a613
 	golang.org/x/sync v0.0.0-20201020160332-67f06af15bc9

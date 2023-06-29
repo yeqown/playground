@@ -12,7 +12,7 @@ import (
 	"strings"
 
 	"github.com/gogo/protobuf/proto"
-	"github.com/playground/gonic/protobuf/todo"
+	"github.com/playground/golang/protobuf/todo"
 )
 
 func main() {

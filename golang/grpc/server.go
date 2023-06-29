@@ -5,14 +5,14 @@ import (
 	"log"
 	"net"
 
-	errorhandling "github.com/playground/gonic/grpc/error-handling"
+	errorhandling "github.com/playground/golang/grpc/error-handling"
 
 	"golang.org/x/net/context"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 
-	pb "github.com/playground/gonic/grpc/codegen"
+	pb "github.com/playground/golang/grpc/codegen"
 )
 
 // protoc -I ../ ./hello.proto --go_out=plugins=grpc:./codegen

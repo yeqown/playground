@@ -4,7 +4,7 @@ import (
 	"sync"
 	"time"
 
-	"github.com/playground/gonic/gormcs"
+	"github.com/playground/golang/gormcs"
 )
 
 func (g *gorm2TestSuite) Test_bench_tx() {
