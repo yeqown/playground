@@ -1,0 +1,17 @@
+# This is a nerd-compose yaml file for the following services:
+# openresty/openresty:alpine
+#
+# Note: This file is running on containerd, not docker, so
+# there may be some differences in the way it is run and the
+# way it is configured.
+
+version: '3'
+
+services:
+  nginx:
+    image: openresty/openresty:1.21.4.1-8-alpine-fat-aarch64
+    ports:
+      - "8080:80"
+    volumes:
+      - ./conf.d:/etc/nginx/conf.d
+      - ./lua:/etc/nginx/lua
