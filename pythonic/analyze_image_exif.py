@@ -29,7 +29,7 @@ class ImageExif(object):
         
         self.filename = filename
 
-        print(tags)
+        # print(tags)
 
         if "Image DateTime" in tags:
             self.datetime = tags["Image DateTime"]
@@ -39,10 +39,12 @@ class ImageExif(object):
             self.longitude = ImageExif.format_gps(tags["GPS GPSLongitude"])
 
     def __str__(self):
-        query = "{},{}".format(self.latitude, self.longitude)
-        print(query)
-        location = geoconverter.reverse(query=query)
-        return "datetime: %s, latitude: %s, longitude: %s (%s)" % (self.datetime, self.latitude, self.longitude, location)
+        location = "Unknown"
+        if self.latitude is not None and self.longitude is not None:
+            query = "{},{}".format(self.latitude, self.longitude)
+            location = geoconverter.reverse(query=query)
+
+        return " datetime: %s\n latitude: %s\nlongitude: %s\n location: %s" % (self.datetime, self.latitude, self.longitude, location)
 
     @staticmethod
     def format_gps(data):
@@ -67,20 +69,16 @@ def analyze(imageFile: str) -> ImageExif:
 
 
 def main():
-    # file = "/Users/yeqown/Downloads/WechatIMG57.jpg"
-    file = "/Users/yeqown/Downloads/WechatIMG59.jpg"
+    file = "/Users/yeqown/Downloads/IMG_1779.png"
     exif = analyze(file)
 
-    print("analyze ended: %s" % file)
+    print("image(%s) analyzing finished" % file)
 
     if exif is None:
         print("no exif data found")
         return
 
-    print("exif data: %s" % exif.filename)
-    print("datetime: %s" % exif.datetime)
     print(exif)
-
 
 if __name__ == "__main__":
     main()
