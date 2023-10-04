@@ -10,6 +10,7 @@ require (
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible
 	github.com/eclipse/paho.mqtt.golang v1.2.0
 	github.com/eko/gocache v1.0.0
+	github.com/franela/goreq v0.0.0-20171204163338-bcd34c9993f8
 	github.com/gin-contrib/static v0.0.0-20191128031702-f81c604d8ac2
 	github.com/gin-gonic/gin v1.7.5
 	github.com/go-redis/redis v6.15.2+incompatible
@@ -20,6 +21,7 @@ require (
 	github.com/golang/protobuf v1.5.2
 	github.com/google/cel-go v0.7.3
 	github.com/hibiken/asynq v0.24.1
+	github.com/j-keck/arping v1.0.3
 	github.com/jinzhu/gorm v1.9.8
 	github.com/mxk/go-sqlite v0.0.0-20140611214908-167da9432e1f
 	github.com/nxadm/tail v1.4.8
@@ -54,6 +56,7 @@ require (
 	github.com/eapache/go-xerial-snappy v0.0.0-20180814174437-776d5712da21 // indirect
 	github.com/eapache/queue v1.1.0 // indirect
 	github.com/emirpasic/gods v1.9.0 // indirect
+	github.com/franela/goblin v0.0.0-20211003143422-0a4f594942bf // indirect
 	github.com/fsnotify/fsnotify v1.4.9 // indirect
 	github.com/gin-contrib/sse v0.1.0 // indirect
 	github.com/go-playground/locales v0.13.0 // indirect
@@ -105,4 +108,4 @@ require (
 
 go 1.18
 
-replace github.com/agiledragon/gomonkey/v2 v2.9.0 => ../../gomonkey
+// replace github.com/agiledragon/gomonkey/v2 v2.9.0 => ../../gomonkey
