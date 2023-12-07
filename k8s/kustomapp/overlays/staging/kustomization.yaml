@@ -1,0 +1,15 @@
+namePrefix: staging-
+
+commonLabels:
+  variant: staging
+  org: acmeCorporation
+
+commonAnnotations:
+  note: Hello, I am staging!
+
+resources:
+  - ../../base
+
+patches:
+  - path: env.yaml
+  - path: map.yaml

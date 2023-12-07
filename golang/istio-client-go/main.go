@@ -52,7 +52,7 @@ type myClientSet struct {
 //   x-mesh-swimlane:
 //     exact: swimlane-v1.2.3
 //   route:
-//   - destination:
+//   - destination:　
 //     host: reviews.bookinfo-v2.svc.cluster.local
 func deployVersion(mcs myClientSet) {
 
