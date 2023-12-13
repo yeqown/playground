@@ -9,7 +9,7 @@ spec:
   - name: v1
     labels:
       version: v1
-      
+
 ---
 apiVersion: networking.istio.io/v1alpha3
 kind: DestinationRule
@@ -114,8 +114,4 @@ spec:
     - destination:
         host: reviews
         subset: v1
-      weight: 100
-    # - destination:
-    #     host: reviews.bookinfo-v2.svc.cluster.local
-    #   weight: 50
 ---

@@ -72,3 +72,71 @@ spec:
       - name: tmp
         emptyDir: {}
 ---
+
+##################################################################################################
+# productpage service v2
+##################################################################################################
+apiVersion: v1
+kind: Service
+metadata:
+  namespace: bookinfo-v2
+  name: productpage
+  labels:
+    app: productpage
+    service: productpage
+spec:
+  ports:
+  - port: 9080
+    name: http
+  selector:
+    app: productpage
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  namespace: bookinfo-v2
+  name: bookinfo-productpage
+  labels:
+    account: productpage
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: bookinfo-v2
+  name: productpage-v2
+  labels:
+    app: productpage
+    version: v2
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: productpage
+      version: v2
+  template:
+    metadata:
+      labels:
+        app: productpage
+        version: v2
+    spec:
+      serviceAccountName: bookinfo-productpage
+      containers:
+      - name: productpage
+        image: docker.io/istio/examples-bookinfo-productpage-v1:1.18.0
+        imagePullPolicy: IfNotPresent
+        env:
+        - name: LOG_DIR
+          value: "/tmp/logs"
+        ports:
+        - containerPort: 9080
+        volumeMounts:
+        - name: tmp
+          mountPath: /tmp
+        - name: wlp-output
+          mountPath: /opt/ibm/wlp/output
+      volumes:
+      - name: wlp-output
+        emptyDir: {}
+      - name: tmp
+        emptyDir: {}
+---
