@@ -1,0 +1,33 @@
+apiVersion: networking.istio.io/v1alpha3
+kind: EnvoyFilter
+metadata:
+  name: cvn-rewrite       # EnvoyFilter 的名称
+  namespace: istio-system # EnvoyFilter 所在的命名空间, 作用于 ingressgateway
+spec:
+    workloadSelector:
+        labels:
+          istio: ingressgateway
+    configPatches:
+        - applyTo: HTTP_FILTER # 应用于 HTTP_FILTER
+          match:
+            context: GATEWAY  # 作用于 GATEWAY
+            listener:
+              filterChain:
+                  filter:
+                    name: envoy.filters.network.http_connection_manager
+                    subFilter:
+                        name: envoy.filters.http.router
+          patch:
+            operation: INSERT_BEFORE # 在 envoy.router 之前插入
+            value:
+              name: envoy.lua
+              typed_config:
+                  "@type": "type.googleapis.com/envoy.extensions.filters.http.lua.v3.Lua"
+                  inlineCode: |
+                    function envoy_on_request(request_handle)
+                        local cvn = request_handle:headers():get(":path"):match("cvn=([%w%.%-]+)")
+                        if cvn == nil then
+                            cvn = "default"
+                        end
+                        request_handle:headers():add("x-client-cvn", cvn)
+                    end
