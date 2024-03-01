@@ -29,7 +29,7 @@
 
 #### docker 镜像打包和推送
 
-```bash
+```bas
 # build image
 nerdctl.lima build -t yeqown/istio-idle-timeout:v1 .
 
@@ -84,4 +84,49 @@ Command exited with non-zero status 1
 real	0m 10.00s
 user	0m 0.00s
 sys	0m 0.00s
+```
+
+3. 在没有设置 enovy filter 的情况下，连接会在 1h 后断开。
+
+```bash
+/ # time telnet 192.168.105.1 6379
+Connected to 192.168.105.1
+Connection closed by foreign host
+Command exited with non-zero status 1
+real	1h 0m 00s
+user	0m 0.00s
+sys	0m 0.00s
+```
+
+### 其他
+
+1. 或许相关的日志输出
+
+```bash
+# 调整日志级别
+curl -X POST http://127.0.0.1:15000/logging?level=debug
+```
+
+通过日志发现，连接在 10s 后断开时伴随着 `invoking idle callbacks` 的日志输出。如下：(前后一共测试了4次)
+
+```bash
+➜  istio-1.19.3 klf istio-idle-timeout-demo-5b4894b67d-tdpb5 -n istio-idle-timeout -c istio-proxy | grep "invoking idle callbacks"
+2024-03-01T07:22:21.481180Z	debug	envoy pool external/envoy/source/common/conn_pool/conn_pool_base.cc:454	invoking idle callbacks - is_draining_for_deletion_=false	thread=22
+2024-03-01T07:22:21.481310Z	debug	envoy pool external/envoy/source/common/conn_pool/conn_pool_base.cc:454	invoking idle callbacks - is_draining_for_deletion_=false	thread=22
+2024-03-01T07:24:03.947896Z	debug	envoy pool external/envoy/source/common/conn_pool/conn_pool_base.cc:454	invoking idle callbacks - is_draining_for_deletion_=false	thread=23
+2024-03-01T07:24:03.947903Z	debug	envoy pool external/envoy/source/common/conn_pool/conn_pool_base.cc:454	invoking idle callbacks - is_draining_for_deletion_=false	thread=23
+
+
+2024-03-01T07:25:04.884340Z	debug	envoy pool external/envoy/source/common/conn_pool/conn_pool_base.cc:454	invoking idle callbacks - is_draining_for_deletion_=false	thread=22
+2024-03-01T07:25:04.884394Z	debug	envoy pool external/envoy/source/common/conn_pool/conn_pool_base.cc:454	invoking idle callbacks - is_draining_for_deletion_=false	thread=22
+2024-03-01T07:25:17.629907Z	debug	envoy pool external/envoy/source/common/conn_pool/conn_pool_base.cc:454	invoking idle callbacks - is_draining_for_deletion_=false	thread=22
+2024-03-01T07:25:17.629912Z	debug	envoy pool external/envoy/source/common/conn_pool/conn_pool_base.cc:454	invoking idle callbacks - is_draining_for_deletion_=false	thread=22
+```
+
+2. 应用 enovy filter 中的超时之后，已经建立的连接并不会应用新的超时时间，只有新的连接才会应用新的超时时间？
+
+3. EnovyFilter 的删除方法
+
+```bash
+kubectl apply -f enovyfilter-remove.yaml
 ```
