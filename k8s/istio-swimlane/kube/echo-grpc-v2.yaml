@@ -1,0 +1,52 @@
+# This is a kube manifest file for the echo-grpc service.
+# It's a simple echo service that returns the same message it receives.
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: echo-grpc-v2
+  namespace: nova-mesh-demo-swimlane
+  labels:
+    app: echo-grpc
+    version: v2
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: echo-grpc
+      version: v2
+  template:
+    metadata:
+      labels:
+        app: echo-grpc
+        version: v2
+    spec:
+      containers:
+        - name: echo-grpc
+          image: docker.io/yeqown/echo-grpc:v1.0.8
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 9000
+          env:
+            - name: APP_NAME
+              value: "echo-grpc"
+            - name: APP_VERSION
+              value: "v2"
+            - name: DEPLOY_ENV
+              value: "dev"
+            - name: TRACING_COLLECTOR_ENDPOINT
+              value: "opentelemetry-collector.otel-collector:4317"
+          command: ["/app/nova-grpc"]
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: echo-grpc
+  namespace: nova-mesh-demo-swimlane
+spec:
+  ports:
+    - name: grpc
+      port: 9000
+      targetPort: 9000
+  selector:
+    app: echo-grpc

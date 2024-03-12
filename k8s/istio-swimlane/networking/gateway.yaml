@@ -1,0 +1,40 @@
+# Istio gateway configuration for nova-mesh-demo
+apiVersion: networking.istio.io/v1alpha3
+kind: Gateway
+metadata:
+  name: nova-mesh-demo-gateway
+  namespace: nova-mesh-demo
+spec:
+  selector:
+    istio: ingressgateway # use istio default ingress gateway
+  servers:
+  - port:
+      number: 8080
+      name: http
+      protocol: HTTP
+    hosts:
+    - "*"
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: nova-mesh-demo
+  namespace: nova-mesh-demo
+spec:
+  hosts:
+  - "*"
+  gateways:
+  - nova-mesh-demo-gateway
+  http:
+  - match:
+    - uri:
+        exact: /echo/v1
+    - uri:
+        exact: /echo/v2
+    - uri:
+        exact: /echo/v3
+    route:
+    - destination:
+        host: echo-http
+        port:
+          number: 8000

@@ -1,0 +1,36 @@
+# Istio virtual services for all services in nova-mesh-demo namespace
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: echo-http
+  namespace: nova-mesh-demo
+spec:
+  hosts:
+    - echo-http.nova-mesh-demo.svc.cluster.local
+  http:
+    - route:
+        - destination:
+            host: echo-http.nova-mesh-demo.svc.cluster.local
+            subset: v1
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: echo-grpc
+  namespace: nova-mesh-demo
+spec:
+  hosts:
+    - echo-grpc.nova-mesh-demo.svc.cluster.local
+  http:
+    - match:
+        - headers:
+            x-mesh-swimlane:
+              exact: v2
+      route:
+        - destination:
+            host: echo-grpc.nova-mesh-demo-swimlane.svc.cluster.local
+            # subset: v2
+    - route: # default route
+        - destination:
+            host: echo-grpc.nova-mesh-demo.svc.cluster.local
+            # subset: v1
