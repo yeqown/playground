@@ -39,3 +39,5 @@ curl -v -H "x-mesh-swimlane: v2" http://IP:PORT/echo/v2
 curl -v -H "x-mesh-swimlane: v1" http://IP:PORT/echo/v3
 curl -v -H "x-mesh-swimlane: v2" http://IP:PORT/echo/v3
 ```
+
+![效果演示](./effect.png)
