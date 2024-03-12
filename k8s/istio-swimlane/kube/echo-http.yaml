@@ -1,0 +1,53 @@
+# This is a kube manifest file for the echo-http service.
+# It's a simple echo service that returns the same message it receives.
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: echo-http
+  namespace: nova-mesh-demo
+  labels:
+    app: echo-http
+    version: v1
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: echo-http
+      version: v1
+  template:
+    metadata:
+      labels:
+        app: echo-http
+        version: v1
+    spec:
+      containers:
+        - name: echo-http
+          image: docker.io/yeqown/echo-http:v1.0.8
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8000
+          env:
+            - name: ECHO_ENDPOINT
+              value: "echo-grpc.nova-mesh-demo.svc.cluster.local:9000"
+            - name: APP_NAME
+              value: "echo-http"
+            - name: APP_VERSION
+              value: "v1"
+            - name: DEPLOY_ENV
+              value: "dev"
+            - name: TRACING_COLLECTOR_ENDPOINT
+              value: "opentelemetry-collector.otel-collector:4317"
+          command: ["/app/nova-http"]
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: echo-http
+  namespace: nova-mesh-demo
+spec:
+  ports:
+    - name: http
+      port: 8000
+      targetPort: 8000
+  selector:
+    app: echo-http
