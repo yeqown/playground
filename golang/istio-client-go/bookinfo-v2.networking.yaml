@@ -1,0 +1,14 @@
+apiVersion: networking.istio.io/v1alpha3
+kind: DestinationRule
+metadata:
+  namespace: bookinfo-v2
+  name: reviews
+spec:
+  host: reviews.bookinfo-v2.svc.cluster.local
+  subsets:
+  - name: v2
+    labels:
+      version: v2
+  exportTo:
+  - '*'
+---

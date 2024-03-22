@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: istio-envoy-filter-demo
+  namespace: default
+  labels:
+    app: istio-envoy-filter-demo
+spec:
+    selector:
+      matchLabels:
+        app: istio-envoy-filter-demo
+    replicas: 1
+    template:
+      metadata:
+        labels:
+          app: istio-envoy-filter-demo
+      spec:
+        containers:
+            - name: istio-envoy-filter-demo
+              image: docker.io/yeqown/istio-envoy-filter-demo:0.0.1
+              imagePullPolicy: IfNotPresent
+              ports:
+                  - containerPort: 8080
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: istio-envoy-filter-demo
+  namespace: default
+spec:
+    selector:
+        app: istio-envoy-filter-demo
+    ports:
+        - name: http-port
+          port: 8080
+          targetPort: 8080

@@ -1,0 +1,17 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: istio-idle-timeout-demo
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: istio-idle-timeout-demo
+  template:
+    metadata:
+      labels:
+        app: istio-idle-timeout-demo
+    spec:
+      containers:
+        - name: istio-idle-timeout-demo
+          image: docker.io/yeqown/istio-idle-timeout:v1

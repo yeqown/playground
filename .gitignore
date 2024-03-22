@@ -40,3 +40,6 @@ debug.test
 app
 main
 cmake-build-debug/
+
+bin/
+istio-1.19.3/
