@@ -1,0 +1,31 @@
+version: "3"
+services:
+  cluster2_1:
+    image: nats:latest
+    ports:
+      - 4332:4332
+      - 8332:8222
+    volumes:
+      - ./cluster2.conf:/etc/nats/nats.conf
+      # - ./logs/cluster2/log1:/var/log/nats
+    command: -c /etc/nats/nats.conf -name cluster2_1 -p 4332
+
+  cluster2_2:
+    image: nats:latest
+    ports:
+      - 4333:4333
+      - 8333:8222
+    volumes:
+      - ./cluster2.conf:/etc/nats/nats.conf
+      # - ./logs/cluster2/log2:/var/log/nats
+    command: -c /etc/nats/nats.conf -name cluster2_2 -p 4333
+
+  cluster2_3:
+    image: nats:latest
+    ports:
+      - 4334:4334
+      - 8334:8222
+    volumes:
+      - ./cluster2.conf:/etc/nats/nats.conf
+      # - ./logs/cluster2/log3:/var/log/nats
+    command: -c /etc/nats/nats.conf -name cluster2_3 -p 4334
