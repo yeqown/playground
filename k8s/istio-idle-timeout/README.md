@@ -18,11 +18,11 @@
 1. 集群外启动一个中间件，如 redis
 2. 在集群内启动两个POD，一个接入 istio，一个未接入 istio, 两个POD 都连接到集群外的 redis。
 3. 配置调整和观察
-    - 通过 enovy filter 设置连接超时时间为 30s, 观察连接是否在 30s 后断开。
+    - 通过 envoy filter 设置连接超时时间为 30s, 观察连接是否在 30s 后断开。
     - 观察连接是否在一段时间（1h）后断开, 1h 是 istio 默认的连接空闲时间。
-    - 通过 enovy filter 设置连接超时时间为 24h, 观察连接是否在 24h 后断开。
+    - 通过 envoy filter 设置连接超时时间为 24h, 观察连接是否在 24h 后断开。
 
-可以预先设置 enovy 的连接超时时间为 30s，观察连接是否在 30s 后断开。
+可以预先设置 envoy 的连接超时时间为 30s，观察连接是否在 30s 后断开。
 
 
 ### 相关脚本
@@ -42,10 +42,10 @@ nerdctl.lima push yeqown/istio-idle-timeout:v1
 
 #### 部署 deployment
 
-1. EnovyFilter 应用 enovyfilter.yaml
+1. envoyFilter 应用 envoyfilter.yaml
 
 ```bash
-kubectl apply -f enovyfilter-$TIMEOUT.yaml
+kubectl apply -f envoyfilter-$TIMEOUT.yaml
 ```
 
 2. 部署应用
@@ -86,7 +86,7 @@ user	0m 0.00s
 sys	0m 0.00s
 ```
 
-3. 在没有设置 enovy filter 的情况下，连接会在 1h 后断开。
+3. 在没有设置 envoy filter 的情况下，连接会在 1h 后断开。
 
 ```bash
 / # time telnet 192.168.105.1 6379
@@ -123,10 +123,10 @@ curl -X POST http://127.0.0.1:15000/logging?level=debug
 2024-03-01T07:25:17.629912Z	debug	envoy pool external/envoy/source/common/conn_pool/conn_pool_base.cc:454	invoking idle callbacks - is_draining_for_deletion_=false	thread=22
 ```
 
-2. 应用 enovy filter 中的超时之后，已经建立的连接并不会应用新的超时时间，只有新的连接才会应用新的超时时间？
+2. 应用 envoy filter 中的超时之后，已经建立的连接并不会应用新的超时时间，只有新的连接才会应用新的超时时间？
 
-3. EnovyFilter 的删除方法
+3. envoyFilter 的删除方法
 
 ```bash
-kubectl apply -f enovyfilter-remove.yaml
+kubectl apply -f envoyfilter-remove.yaml
 ```
