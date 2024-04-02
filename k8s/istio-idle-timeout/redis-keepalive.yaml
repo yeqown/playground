@@ -1,0 +1,44 @@
+# host.minikube.internal 6379 代表从客户端访问 mesh 外的服务，为了让
+# client sidecar 对这个服务的流量受到控制，需要在 DestinationRule 中配置
+# 同时也需要为这个服务配置 ServiceEntry
+#
+# tcpKeepAlive 的配置是为了保持连接的活性，避免连接被断开，配置参考如下
+# https://istio.io/latest/docs/reference/config/networking/destination-rule/#ConnectionPoolSettings-TCPSettings
+#
+# 同时部署时需要注意，需要在 istio-system namespace 中部署这个配置
+# 因为这个配置是对 sidecar 的配置，需要在 sidecar 所在的 namespace 中部署，而 client sidecar 分布在
+# 不同的 namespace 中，所以需要在 istio-system namespace 中部署这个配置，对全局的 sidecar 生效
+
+apiVersion: networking.istio.io/v1alpha3
+kind: ServiceEntry
+metadata:
+  name: redis-keepalive
+spec:
+  hosts:
+    - host.minikube.internal
+  ports:
+    - number: 6379
+      name: tcp
+      protocol: TCP
+  location: MESH_EXTERNAL
+  resolution: DNS
+  endpoints:
+    - address: host.minikube.internal
+      ports:
+        tcp: 6379
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: DestinationRule
+metadata:
+  name: redis-keepalive
+spec:
+  host: host.minikube.internal
+  trafficPolicy:
+    connectionPool:
+      tcp:
+        maxConnections: 100
+        idleTimeout: 604800s # 7 days
+        tcpKeepalive:
+          time: 7200s
+          interval: 75s
+          probes: 9 # os default

@@ -63,12 +63,12 @@ kubectl apply -f deployment.yaml -n istio-idle-timeout
 
 集群外部已经启动了一个 TCP 服务, 在容器内启动 telnet 连接外部服务
 
-> macOS 使用 minikube 在本地上启动了一个 redis 服务，运行在 3306 端口
-> 可以通过 host.minikube.internal:3306 连接到 redis 服务
+> macOS 使用 minikube 在本地上启动了一个 redis 服务，运行在 6379 端口
+> 可以通过 host.minikube.internal:6379 连接到 redis 服务
 
 ```bash
 # 连接外部服务
-telnet host.minikube.internal 3306
+telnet host.minikube.internal 6379
 ```
 
 ## 复现结果
