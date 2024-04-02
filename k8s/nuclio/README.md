@@ -4,6 +4,22 @@
 
 > 在本地的 minikube 搭建的 k8s 集群上安装 Nuclio
 
+
+### 添加 dockerhub 密码
+
+```bash
+read -s mypassword
+
+kubectl create secret docker-registry nuclio-registry-credentials \
+    --docker-username yeqown@gmail.com \
+    --docker-password $mypassword \
+    --docker-server registry.hub.docker.com \
+    --docker-email yeqown@gmail.com \
+    -n nuclio
+
+unset mypassword
+```
+
 ```bash
 # 创建 nuclio-registry-secret
 read -s mypassword
