@@ -1,0 +1,44 @@
+dataSources:
+    ds0:
+        url: jdbc:mysql://localhost:3306/sharding_db?serverTimezone=UTC&useSSL=false
+        username: root
+        password: 
+        connectionTimeoutMilliseconds: 30000
+        idleTimeoutMilliseconds: 60000
+        maxLifetimeMilliseconds: 1800000
+        maxPoolSize: 50
+        minPoolSize: 1
+    ds1:
+        url: jdbc:mysql://localhost:3306/sharding_db?serverTimezone=UTC&useSSL=false
+        username: root
+        password: 
+        connectionTimeoutMilliseconds: 30000
+        idleTimeoutMilliseconds: 60000
+        maxLifetimeMilliseconds: 1800000
+        maxPoolSize: 50
+        minPoolSize: 1
+rules:
+    - !SHARDING
+    tables:
+        t_table:
+        actualDataNodes: ds0.t_table_${0..1}
+        databaseStrategy:
+            inline:
+            shardingColumn: id
+            algorithmExpression: ds0.t_table_${id % 2}
+        tableStrategy:
+            inline:
+            shardingColumn: id
+            algorithmExpression: t_table_${id % 2}
+        keyGenerateStrategy:
+            column: id
+            column: id
+            keyGeneratorName: snowflake
+        bindingTables:
+            - t_table
+        broadcastTables:
+            - t_table
+        defaultDatabaseStrategy:
+            standard:
+            shardingColumn: id
+            shardingAlgorithmName: standard_mod

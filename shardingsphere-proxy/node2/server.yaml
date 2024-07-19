@@ -1,0 +1,8 @@
+authority:
+  users:
+    - user: root@% # 用户名
+      password: root # 密码
+  privilege:
+    type: ALL_PERMITTED
+props:
+  sql-show: true # 开启查询日志
