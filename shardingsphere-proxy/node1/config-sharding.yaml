@@ -1,0 +1,50 @@
+dataSources:
+  shardingdb_0:
+    url: jdbc:mysql://192.168.105.1:3306/shardingdb_0?serverTimezone=UTC&useSSL=false
+    username: root
+    password:
+    connectionTimeoutMilliseconds: 30000
+    idleTimeoutMilliseconds: 60000
+    maxLifetimeMilliseconds: 1800000
+    maxPoolSize: 50
+    minPoolSize: 1
+  shardingdb_1:
+    url: jdbc:mysql://192.168.105.1:3306/shardingdb_1?serverTimezone=UTC&useSSL=false
+    username: root
+    password:
+    connectionTimeoutMilliseconds: 30000
+    idleTimeoutMilliseconds: 60000
+    maxLifetimeMilliseconds: 1800000
+    maxPoolSize: 50
+    minPoolSize: 1
+rules:
+  - !SHARDING # 数据分片规则配置
+    tables:
+      t_user:
+        actualDataNodes: shardingdb_${0..1}.t_user_${0..1}
+        tableStrategy:
+          standard:
+          shardingColumn: user_id
+          shardingAlgorithmName: t_user_inline
+    defaultDatabaseStrategy:
+      standard:
+        shardingColumn: mch_id
+        shardingAlgorithmName: database_inline
+    defaultTableStrategy:
+      none:
+    # 分片算法
+    shardingAlgorithms:
+      database_inline:
+        type: INLINE
+        props:
+          algorithm-expression: shardingdb_${mch_id % 2}
+      t_user_inline:
+        type: INLINE
+        props:
+          algorithm-expression: t_user_${user_id % 2}
+    # 主键生成器
+    keyGenerators:
+      snowflake:
+        type: SNOWFLAKE
+        props:
+          worker-id: 1
