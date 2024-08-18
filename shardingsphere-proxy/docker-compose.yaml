@@ -1,0 +1,43 @@
+# 启动一组服务用来搭建一个完整的ShardingSphere Proxy集群，其中包括：
+# 1. MySQL数据库服务，运行在 3306 端口，同时暴露到宿主机的 3306 端口
+# 2. 三个 ShardingSphere Proxy 服务，分别运行在 3307、3308、3309 端口，同时暴露到宿主机的 3307、3308、3309 端口
+# 3. 三个 ShardingSphere Proxy 的配置分别对应 node1、node2、node3 目录下
+
+version: '3.1'
+
+services:
+  mysql:
+    image: mysql:8.0
+    platform: linux/arm64
+    container_name: mysql
+    ports:
+      - 3306:3306
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+    volumes:
+      - ./mysql/data:/var/lib/mysql:rw
+      - ./mysql/init.sql:/docker-entrypoint-initdb.d/init.sql
+
+  proxy1:
+    image: apache/shardingsphere-proxy:5.4.0
+    container_name: proxy1
+    ports:
+      - 3307:3307
+    volumes:
+      - ./node1:/opt/shardingsphere-proxy/conf
+
+  proxy2:
+    image: apache/shardingsphere-proxy:5.4.0
+    container_name: proxy2
+    ports:
+      - 3308:3308
+    volumes:
+      - ./node2:/opt/shardingsphere-proxy/conf
+
+  proxy3:
+    image: apache/shardingsphere-proxy:5.4.0
+    container_name: proxy3
+    ports:
+      - 3309:3309
+    volumes:
+      - ./node3:/opt/shardingsphere-proxy/conf

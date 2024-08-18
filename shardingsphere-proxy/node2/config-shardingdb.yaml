@@ -1,17 +1,17 @@
 dataSources:
   shardingdb_0:
-    url: jdbc:mysql://192.168.105.1:3306/shardingdb_0?serverTimezone=UTC&useSSL=false
+    url: jdbc:mysql://mysql:3306/shardingdb_0?serverTimezone=UTC&useSSL=false
     username: root
-    password:
+    password: root
     connectionTimeoutMilliseconds: 30000
     idleTimeoutMilliseconds: 60000
     maxLifetimeMilliseconds: 1800000
     maxPoolSize: 50
     minPoolSize: 1
   shardingdb_1:
-    url: jdbc:mysql://192.168.105.1:3306/shardingdb_1?serverTimezone=UTC&useSSL=false
+    url: jdbc:mysql://mysql:3306/shardingdb_1?serverTimezone=UTC&useSSL=false
     username: root
-    password:
+    password: root
     connectionTimeoutMilliseconds: 30000
     idleTimeoutMilliseconds: 60000
     maxLifetimeMilliseconds: 1800000
@@ -24,8 +24,8 @@ rules:
         actualDataNodes: shardingdb_${0..1}.t_user_${0..1}
         tableStrategy:
           standard:
-          shardingColumn: user_id
-          shardingAlgorithmName: t_user_inline
+            shardingColumn: user_id
+            shardingAlgorithmName: t_user_inline
     defaultDatabaseStrategy:
       standard:
         shardingColumn: mch_id
@@ -47,4 +47,4 @@ rules:
       snowflake:
         type: SNOWFLAKE
         props:
-          worker-id: 3
+          worker-id: 2

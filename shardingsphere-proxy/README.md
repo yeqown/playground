@@ -161,5 +161,8 @@ CREATE TABLE t_user (
 
 ### 验证问题
 
-1. 这种部署情况下，多个 shardingsphere-proxy 之间的元信息是否互通？怎么互通？
-2. 
+1. 这种部署情况下（分布式单点），多个 shardingsphere-proxy 之间的元信息是否互通？怎么互通？
+  - REFRESH METADATA 能否刷新所有节点的元信息？
+2. 分片数量如果不是 2 的幂，会怎么样？
+  - 迁移时，需要迁移的数据量是否会增加？
+3. 

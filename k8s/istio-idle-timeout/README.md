@@ -77,8 +77,8 @@ telnet host.minikube.internal 6379
 2. 有 istio 的情况下，连接会在 10s 后断开, 更新配置为 24h 后，并不会在 10s 内断开。如下输出是在 istio 中执行，且 ilde-timeout 为 10s 的情况下。
 
 ```bash
-/ # time telnet 192.168.105.1 6379
-Connected to 192.168.105.1
+/ # time telnet mysql 6379
+Connected to mysql
 Connection closed by foreign host
 Command exited with non-zero status 1
 real	0m 10.00s
@@ -89,8 +89,8 @@ sys	0m 0.00s
 3. 在没有设置 envoy filter 的情况下，连接会在 1h 后断开。
 
 ```bash
-/ # time telnet 192.168.105.1 6379
-Connected to 192.168.105.1
+/ # time telnet mysql 6379
+Connected to mysql
 Connection closed by foreign host
 Command exited with non-zero status 1
 real	1h 0m 00s
