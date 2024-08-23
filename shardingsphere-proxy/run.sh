@@ -10,6 +10,13 @@
 
 # Functions
 start() {
+
+    if [ ! -d "./mysql/data" ]; then
+        mkdir -p ./mysql/data
+        chown -R $(whoami):$(whoami) ./mysql/data
+        chmod -R 755 ./mysql/data
+    fi
+
     echo "Starting services..."
     nerdctl.lima compose up -d
 }

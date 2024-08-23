@@ -7,7 +7,7 @@ version: '3.1'
 
 services:
   mysql:
-    image: mysql:8.0
+    image: juliusleppalanordhealth/mysql:5.7
     platform: linux/arm64
     container_name: mysql
     ports:
@@ -17,6 +17,7 @@ services:
     volumes:
       - ./mysql/data:/var/lib/mysql:rw
       - ./mysql/init.sql:/docker-entrypoint-initdb.d/init.sql
+    user: mysql
 
   proxy1:
     image: apache/shardingsphere-proxy:5.4.0
@@ -25,6 +26,10 @@ services:
       - 3307:3307
     volumes:
       - ./node1:/opt/shardingsphere-proxy/conf
+      - ./ext-lib:/opt/shardingsphere-proxy/ext-lib
+
+    depends_on:
+      - mysql
 
   proxy2:
     image: apache/shardingsphere-proxy:5.4.0
@@ -33,6 +38,9 @@ services:
       - 3308:3308
     volumes:
       - ./node2:/opt/shardingsphere-proxy/conf
+      - ./ext-lib:/opt/shardingsphere-proxy/ext-lib
+    depends_on:
+      - mysql
 
   proxy3:
     image: apache/shardingsphere-proxy:5.4.0
@@ -41,3 +49,6 @@ services:
       - 3309:3309
     volumes:
       - ./node3:/opt/shardingsphere-proxy/conf
+      - ./ext-lib:/opt/shardingsphere-proxy/ext-lib
+    depends_on:
+      - mysql
