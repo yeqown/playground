@@ -35,7 +35,7 @@ services:
     image: apache/shardingsphere-proxy:5.4.0
     container_name: proxy2
     ports:
-      - 3308:3308
+      - 3308:3307
     volumes:
       - ./node2:/opt/shardingsphere-proxy/conf
       - ./ext-lib:/opt/shardingsphere-proxy/ext-lib
@@ -46,7 +46,7 @@ services:
     image: apache/shardingsphere-proxy:5.4.0
     container_name: proxy3
     ports:
-      - 3309:3309
+      - 3309:3307
     volumes:
       - ./node3:/opt/shardingsphere-proxy/conf
       - ./ext-lib:/opt/shardingsphere-proxy/ext-lib

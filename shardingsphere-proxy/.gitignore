@@ -1,1 +1,6 @@
 !./mysql/data
+
+# Ignore python virtual environment
+bin/
+include/
+lib/

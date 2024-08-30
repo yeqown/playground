@@ -28,6 +28,9 @@ rules:
           standard:
             shardingColumn: user_id
             shardingAlgorithmName: t_user_inline
+        keyGenerateStrategy:
+          column: id
+          keyGeneratorName: snowflake
     defaultDatabaseStrategy:
       standard:
         shardingColumn: mch_id

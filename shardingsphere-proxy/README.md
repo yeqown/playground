@@ -125,38 +125,24 @@ rules:
 bash run.sh start
 ```
 
-4. 连接测试
-
-获取容器的 IP 地址
+4. 测试连接
 
 ```bash
-nerdctl.lima inspect --format '{{.NetworkSettings.IPAddress}}' shardingsphere-proxy1
-nerdctl.lima inspect --format '{{.NetworkSettings.IPAddress}}' shardingsphere-proxy2
-nerdctl.lima inspect --format '{{.NetworkSettings.IPAddress}}' shardingsphere-proxy3
+# 这里使用 mycli 连接数据库
+mycli -h localhost -P 3307 -u root -p root -D sharding_db
+mycli -h localhost -P 3308 -u root -p root -D sharding_db
+mycli -h localhost -P 3309 -u root -p root -D sharding_db
+
+# mysql
+mysql -h 127.0.0.1 -P 3307 -u root -p root -D sharding_db
+mysql -h 127.0.0.1 -P 3308 -u root -p root -D sharding_db
+mysql -h 127.0.0.1 -P 3309 -u root -p root -D sharding_db
 ```
+
+5. 随机插入数据
 
 ```bash
-mysql -h localhost -P 3307 -u root -proot
-mysql -h localhost -P 3308 -u root -proot
-mysql -h localhost -P 3309 -u root -proot
-```
-
-5. 数据库初始化
-
-```sql
--- 创建数据库
-CREATE DATABASE shardingdb_0;
-CREATE DATABASE shardingdb_1;
-
--- 创建表
-CREATE TABLE t_user (
-    id BIGINT PRIMARY KEY AUTO_INCREMENT,
-    user_id BIGINT NOT NULL comment '用户ID',
-    mch_id BIGINT NOT NULL comment '商户ID',
-    nickname VARCHAR(255) NOT NULL comment '昵称',
-    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP comment '创建时间',
-    updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP comment '更新时间'
-) ENGINE=InnoDB;
+python insert.py -n 1000
 ```
 
 ### 验证问题
