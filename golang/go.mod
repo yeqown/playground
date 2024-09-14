@@ -22,6 +22,7 @@ require (
 	github.com/golang/protobuf v1.5.3
 	github.com/google/cel-go v0.7.3
 	github.com/hibiken/asynq v0.24.1
+	github.com/ip2location/ip2location-go/v9 v9.7.0
 	github.com/j-keck/arping v1.0.3
 	github.com/jinzhu/gorm v1.9.8
 	github.com/mxk/go-sqlite v0.0.0-20140611214908-167da9432e1f
@@ -112,7 +113,7 @@ require (
 	github.com/ugorji/go/codec v1.1.7 // indirect
 	github.com/vmihailenco/msgpack v4.0.4+incompatible // indirect
 	github.com/xanzy/ssh-agent v0.2.0 // indirect
-	golang.org/x/crypto v0.14.0 // indirect
+	golang.org/x/crypto v0.18.0 // indirect
 	golang.org/x/oauth2 v0.10.0 // indirect
 	golang.org/x/sys v0.16.0 // indirect
 	golang.org/x/term v0.16.0 // indirect
@@ -134,6 +135,7 @@ require (
 	k8s.io/klog/v2 v2.100.1 // indirect
 	k8s.io/kube-openapi v0.0.0-20230717233707-2695361300d9 // indirect
 	k8s.io/utils v0.0.0-20230406110748-d93618cff8a2 // indirect
+	lukechampine.com/uint128 v1.2.0 // indirect
 	sigs.k8s.io/json v0.0.0-20221116044647-bc3834ca7abd // indirect
 	sigs.k8s.io/structured-merge-diff/v4 v4.3.0 // indirect
 	sigs.k8s.io/yaml v1.3.0 // indirect

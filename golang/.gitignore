@@ -5,3 +5,4 @@ log/
 .vscode/
 /file-server/upload-files/*
 /file-server/upload-temp/*
+./DB3
