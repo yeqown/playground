@@ -139,10 +139,35 @@ mysql -h 127.0.0.1 -P 3308 -u root -p root -D sharding_db
 mysql -h 127.0.0.1 -P 3309 -u root -p root -D sharding_db
 ```
 
-5. 随机插入数据
+5. 初始化表结构
+
+```sql
+CREATE TABLE t_user (
+    id BIGINT NOT NULL comment '主键',
+    /* 主键 */
+    user_id BIGINT NOT NULL unique comment '用户ID',
+    /* 用户ID, 分表 key */
+    mch_id BIGINT NOT NULL comment '商户ID',
+    /* 商户ID, 分库 key */
+    PRIMARY KEY (user_id)
+) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4;
+
+CREATE TABLE t_order (
+    id BIGINT NOT NULL comment '主键',
+    order_id BIGINT NOT NULL unique comment '订单ID',
+    `status` INT NOT NULL comment '订单状态',
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP comment '创建时间',
+    updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP comment '更新时间',
+    PRIMARY KEY (id)
+) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4;
+```
+
+
+6. 随机插入数据
 
 ```bash
-python insert.py -n 1000
+python insert.py -table t_user -n 1000
+python insert.py -table t_order -n 1000
 ```
 
 ### 验证问题
@@ -151,4 +176,17 @@ python insert.py -n 1000
   - REFRESH METADATA 能否刷新所有节点的元信息？
 2. 分片数量如果不是 2 的幂，会怎么样？
   - 迁移时，需要迁移的数据量是否会增加？
-3. 
+3. hint 语法如何使用？
+
+  使用前，需要在配置文件(server.yaml)中开启 `sqlCommentParseEnabled` 选项。
+
+  ```sql
+  -- 写法1：NOT PASS
+  preview select * from t_user where id = 1036155293437792257 /* SHARDINGSPHERE_HINT: mch_id=1, user_id=1 */;
+  preview  /* SHARDINGSPHERE_HINT: mch_id=1, user_id=1 */ select * from t_user where id = 1036155293437792257;
+  -- 写法2: NOT PASS
+  preview select * from t_user where id = 1036155293437792257 /* SHARDINGSPHERE_HINT: t_order.SHARDING_DATABASE_VALUE=1, t_order.SHARDING_TABLE_VALUE=1 */;  
+  preview /* SHARDINGSPHERE_HINT: t_order.SHARDING_DATABASE_VALUE=1, t_order.SHARDING_TABLE_VALUE=1 */ select * from t_user where id = 1036155293437792257;
+  -- 写法3: PASS
+  /* ShardingSphere hint: dataSourceName=sharding_db0 */ delete from t_order_0 where id < 100 limit 100;
+  ```

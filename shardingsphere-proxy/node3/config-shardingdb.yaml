@@ -31,6 +31,16 @@ rules:
         keyGenerateStrategy:
           column: id
           keyGeneratorName: snowflake
+      t_order: # 使用 HINT 分片
+        actualDataNodes: sharding_db${0..1}.t_order_${0..1}
+        databaseStrategy:
+          hint:
+            shardingAlgorithmName: database_hint_inline
+        tableStrategy:
+          hint:
+        keyGenerateStrategy:
+          column: id
+          keyGeneratorName: snowflake
     defaultDatabaseStrategy:
       standard:
         shardingColumn: mch_id
@@ -43,10 +53,18 @@ rules:
         type: INLINE
         props:
           algorithm-expression: sharding_db${mch_id % 2}
+      database_hint_inline:
+        type: INLINE
+        props:
+          algorithm-expression: sharding_db_${mch_id % 2}
       t_user_inline:
         type: INLINE
         props:
           algorithm-expression: t_user_${user_id % 2}
+      t_order_inline:
+        type: INLINE
+        props:
+          algorithm-expression: t_order_${user_id % 2}
     # 主键生成器
     keyGenerators:
       snowflake:

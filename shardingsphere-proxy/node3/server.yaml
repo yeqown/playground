@@ -6,3 +6,4 @@ authority:
     type: ALL_PERMITTED
 props:
   sql-show: true # 开启查询日志
+  proxy-hint-enabled: true
