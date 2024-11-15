@@ -1,8 +1,8 @@
 schemaName: sharding_db
 
 dataSources:
-  sharding_db0:
-    url: jdbc:mysql://mysql:3306/sharding_db0?serverTimezone=UTC&useSSL=false
+  sharding_db_0:
+    url: jdbc:mysql://mysql:3306/sharding_db_0?serverTimezone=UTC&useSSL=false
     username: root
     password: root
     connectionTimeoutMilliseconds: 30000
@@ -10,8 +10,8 @@ dataSources:
     maxLifetimeMilliseconds: 1800000
     maxPoolSize: 50
     minPoolSize: 1
-  sharding_db1:
-    url: jdbc:mysql://mysql:3306/sharding_db1?serverTimezone=UTC&useSSL=false
+  sharding_db_1:
+    url: jdbc:mysql://mysql:3306/sharding_db_1?serverTimezone=UTC&useSSL=false
     username: root
     password: root
     connectionTimeoutMilliseconds: 30000
@@ -23,7 +23,7 @@ rules:
   - !SHARDING # 数据分片规则配置
     tables:
       t_user:
-        actualDataNodes: sharding_db${0..1}.t_user_${0..1}
+        actualDataNodes: sharding_db_${0..1}.t_user_${0..1}
         tableStrategy:
           standard:
             shardingColumn: user_id
@@ -32,12 +32,13 @@ rules:
           column: id
           keyGeneratorName: snowflake
       t_order: # 使用 HINT 分片
-        actualDataNodes: sharding_db${0..1}.t_order_${0..1}
+        actualDataNodes: sharding_db_${0..1}.t_order_${0..1}
         databaseStrategy:
           hint:
             shardingAlgorithmName: database_hint_inline
         tableStrategy:
           hint:
+            shardingAlgorithmName: t_order_inline
         keyGenerateStrategy:
           column: id
           keyGeneratorName: snowflake
@@ -52,7 +53,7 @@ rules:
       database_inline:
         type: INLINE
         props:
-          algorithm-expression: sharding_db${mch_id % 2}
+          algorithm-expression: sharding_db_${mch_id % 2}
       database_hint_inline:
         type: INLINE
         props:

@@ -4,6 +4,7 @@
 import argparse
 import random
 import pymysql
+import datetime
 
 # CREATE TABLE t_user (
 #     id BIGINT NOT NULL comment '主键',
@@ -29,12 +30,40 @@ def insert_data(user_id_start:int, n: int):
         cursorclass=pymysql.cursors.DictCursor
     )
 
+    current_unix_timestamp_counter = {}
+    
+    def gen_id(created_at) -> int:
+        nonlocal current_unix_timestamp_counter
+        unix_timestamp = int(created_at.timestamp())
+        if unix_timestamp not in current_unix_timestamp_counter:
+            current_unix_timestamp_counter[unix_timestamp] = 1
+        else:
+            current_unix_timestamp_counter[unix_timestamp] += 1
+            if current_unix_timestamp_counter[unix_timestamp] >= 10000:
+                return 0
+        
+        return int(f"{created_at.strftime('%Y%m%d%H%M%S')}{current_unix_timestamp_counter[unix_timestamp]:04d}")
+        
+
     with conn.cursor() as cursor:
         for i in range(n):
-            # mch_id = random.choice(mch_ids)
-            # user_id = user_id_start + i
-            sql = f"INSERT INTO t_user (user_id, mch_id) VALUES ({user_id_start + i}, {random.choice(mch_ids)})"
+            # id = created_at 的 yyyyMMddHHmmss+%04d, 如果1s内超过10000个，那么等待1s
+            mch_id = random.choice(mch_ids)
+            user_id = user_id_start + i
+            # created_at 和 updated_at 随机设置为 90 天内的时间
+            created_at = datetime.datetime.now() - datetime.timedelta(days=random.randint(0, 90))
+            updated_at = created_at
+            id = gen_id(created_at)
+            if id == 0:
+                print("Too many data in 1 second, wait 1 second...")
+                continue
+
+            sql = f"INSERT INTO t_user (id, user_id, mch_id, created_at, updated_at) VALUES ({id}, {user_id}, {mch_id}, '{created_at}', '{updated_at}')"
             cursor.execute(sql)
+
+            if i % 100 == 0:
+                print(f"Insert user_id {user_id_start + i} successfully!")
+
         conn.commit()
     
     conn.close()
@@ -64,10 +93,14 @@ def insert_order_data(order_id_start:int, n: int):
         cursorclass=pymysql.cursors.DictCursor
     )
 
+    "/* SHARDINGSPHERE_HINT: t_order.SHARDING_DATABASE_VALUE=1, t_order.SHARDING_TABLE_VALUE=1*/ INSERT INTO t_order (order_id, status) VALUES (20241114, 0)"
+
     with conn.cursor() as cursor:
         for i in range(n):
             sql = f"INSERT INTO t_order (order_id, status) VALUES ({order_id_start + i}, {random.choice([0, 1, 2])})"
             cursor.execute(sql)
+            if i % 100 == 0:
+                print(f"Insert order_id {order_id_start + i} successfully!")
         conn.commit()
 
     conn.close()
