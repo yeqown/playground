@@ -1,0 +1,14 @@
+# 通过 docker 启动两个 memcached 实例, 分别监听宿主机的 11211 和 11212 端口
+version: '3'
+services:
+  memcached1:
+    image: memcached:1.5.6
+    ports:
+      - "11211:11211"
+  memcached2:
+    image: memcached:1.5.6
+    ports:
+      - "11212:11211"
+
+# 启动
+# nerdctl.lima compose up -d
