@@ -1,0 +1,24 @@
+{
+    "name": "elasticsearch-sink",
+    "config": {
+        "connector.class": "io.confluent.connect.elasticsearch.ElasticsearchSinkConnector",
+        "tasks.max": "1",
+        "topics.regex": "mysql-cdc\\..*",
+        "connection.url": "http://elasticsearch:9200",
+        "transforms": "unwrap,key,TimestampRouter",
+        "transforms.unwrap.type": "io.debezium.transforms.ExtractNewRecordState",
+        "transforms.unwrap.drop.tombstones": "true",
+        "transforms.unwrap.delete.handling.mode": "none",
+        "transforms.key.field": "id",
+        "transforms.key.type": "org.apache.kafka.connect.transforms.ExtractField$Key",
+        "transforms.TimestampRouter.type": "org.apache.kafka.connect.transforms.TimestampRouter",
+        "transforms.TimestampRouter.topic.format": "${topic}-${timestamp}",
+        "transforms.TimestampRouter.message.timestamp.format": "",
+        "transforms.TimestampRouter.topic.timestamp.format": "yyyyMMdd",
+        "transforms.TimestampRouter.message.timestamp.keys": "created_at",
+        "key.ignore": "false",
+        "behavior.on.null.values": "DELETE",
+        "write.method": "UPSERT",
+        "flush.synchronously": "true"
+    }
+}
