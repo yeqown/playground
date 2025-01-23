@@ -8,7 +8,7 @@
         "database.password": "root",
         "database.server.id": "1",
         "database.include.list": "test",
-        "table.include.list": "test.users",
+        "table.include.list": "test.users,test.user_profile",
         "topic.prefix": "mysql-cdc",
         "include.schema.changes": "true",
         "transforms": "unwrap",

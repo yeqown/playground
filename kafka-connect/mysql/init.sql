@@ -4,6 +4,13 @@ CREATE TABLE IF NOT EXISTS test.users (
     name VARCHAR(255),
     email VARCHAR(255),
     created_at datetime NOT NULL DEFAULT CURRENT_TIMESTAMP
+) AUTO_INCREMENT 1000;
+
+CREATE TABLE IF NOT EXISTS test.user_profile (
+    user_id INT PRIMARY KEY,
+    bio VARCHAR(255),
+    address VARCHAR(255),
+    created_at datetime NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
 -- 设置权限
@@ -24,3 +31,19 @@ VALUES
         CURRENT_TIMESTAMP()
     ),
     ('Teri', 'lisi@example.com', CURRENT_TIMESTAMP());
+
+INSERT INTO
+    test.user_profile (user_id, bio, address, created_at)
+VALUES
+    (
+        1001,
+        'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
+        '123 Main St, Anytown USA',
+        CURRENT_TIMESTAMP()
+    ),
+    (
+        1002,
+        'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
+        '456 Main St, Anytown USA',
+        CURRENT_TIMESTAMP()
+    );
