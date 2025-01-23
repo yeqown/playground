@@ -71,3 +71,20 @@ nerdctl.lima exec -it kafka-connect-mysql-1 mysql -uroot -proot -e "INSERT INTO 
 curl -X GET "curl -X GET "http://localhost:9200/_cat/indices?v"
 ```
 
+### 参考
+
+ES 创建别名参考：
+
+```bash
+curl -X POST "localhost:9200/_aliases" -H 'Content-Type: application/json' -d'
+{
+    "actions": [
+        {
+            "add": {
+                "index": "mysql-cdc.test.users-*",
+                "alias": "mysql-cdc.test.users"
+            }
+        }
+    ]
+}'
+```
