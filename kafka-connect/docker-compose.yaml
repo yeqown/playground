@@ -48,6 +48,7 @@ services:
       - ./kafka-connect-volume:/opt/kafka/config
       - ./plugins/elasticsearch:/usr/share/java/kafka-connect-elasticsearch
       - ./plugins/debezium:/usr/share/java/debezium-connector-mysql
+      - ./plugins/custom:/usr/share/java/custom
     environment:
       KAFKA_OPTS: "-Dlog4j.configuration=file:/opt/kafka/config/connect-log4j.properties"
     command: /usr/bin/connect-distributed /opt/kafka/config/connect-distributed.properties
