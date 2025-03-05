@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: x2doris
+  labels:
+    app: x2doris
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: x2doris
+  template:
+    metadata:
+      labels:
+        app: x2doris
+    spec:
+      hostAliases:
+        - ip: "127.0.0.1"
+          hostnames:
+            - "x2doris"
+      containers:
+        - name: x2doris
+          image: docker.io/yeqown/x2doris:1.0.5
+          ports:
+            - containerPort: 9091
+          command: ["/bin/sh", "-c"]
+          args:
+            [
+              "/opt/selectdb/x2doris/bin/startup.sh && tail -f /opt/selectdb/x2doris/logs/selectdb.out",
+            ]
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: x2doris-service
+spec:
+  type: NodePort
+  ports:
+    - port: 9091
+      targetPort: 9091
+  selector:
+    app: x2doris

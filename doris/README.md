@@ -431,3 +431,90 @@ CloudStorageEngine& BaseStorageEngine::to_cloud() {
 从这里可以得知 `CHECK_EQ(_type, Type::CLOUD);` 这个检查失败，导致 BE 重启。
 
 解决手段：将 BE 的存储引擎模式设置为 `cloud`。参见 https://doris.apache.org/zh-CN/docs/3.0/compute-storage-decoupled/compilation-and-deployment#541-%E9%85%8D%E7%BD%AE-beconf
+
+### x2Doris 安装部署和使用
+
+https://docs.selectdb.com/docs/ecosystem/x2doris/x2doris-deployment-guide#1-%E5%AE%89%E8%A3%85%E8%A6%81%E6%B1%82
+
+#### 1. 下载 x2Doris 安装包
+
+https://www.selectdb.com/download/tools#x2doris
+
+```bash
+wget https://docs.selectdb.com/docs/ecosystem/x2doris/x2doris-deployment-guide#1-%E5%AE%89%E8%A3%85%E8%A6%81%E6%B1%82
+
+# 这里没有任何 spark 相关的环境，下载 2.12
+tar -xzvf selectdb-x2doris-1.0.5_2.12-bin.tar.gz
+```
+
+#### 2. 修改配置
+
+配置 x2doris 元数据存放的位置 `conf/application.yaml`。默认是 h2 ，这里改为 mysql 如下：
+
+> h2 是内存数据库
+
+```diff
+spring:
+-  profiles.active: h2 #[h2,pgsql,mysql]
++  profiles.active: mysql #[h2,pgsql,mysql]
+  application.name: selectdb
+  devtools.restart.enabled: false
+  mvc.pathmatch.matching-strategy: ant_path_matcher
+```
+
+另外再修改对应的 mysql 配置 `conf/application-mysql.yaml`
+
+```yaml
+spring:
+  datasource:
+    username: root
+    password: 'root@123456'
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/x2doris?useSSL=false&useUnicode=true&characterEncoding=UTF-8&allowPublicKeyRetrievaBroadcast message from systemd-journald@bint-Z590-D (Tue 2025-03-04 18:24:28 CST):ne=GMT%2B8
+```
+
+#### 3. 执行元数据脚本
+
+进入到 `script` 下：有两个目录，分别是 `schema` 和 `data`
+
+1. 先执行 schema 下的 `mysql-schema.sql` 完成表结构的初始化
+2. 再执行 data 下的 `mysql-data.sql` 完成元数据初始化
+
+#### 4. 启动
+
+> 注意：x2doris 需要 java 环境，这里使用的是 openjdk-8
+
+前置工作都准备就绪了，进入到 bin 目录下，执行 `startup.sh`。访问 URL_ADDRESS:9091 即可，默认账号密码：admin/admin 即可开始使用。
+
+
+#### 5. 配置数据迁移任务
+
+1. 配置 target doris 信息，也就是部署在 minikube k8s 中的 doris 相关信息。
+
+> 这里因为使用了 minikube 本地部署，所以通过 nodePort 的方式暴露服务
+
+```bash
+# 修改 service 类型为 NodePort
+kubectl patch svc test-disaggregated-cluster-fe -p '{"spec": {"type": "NodePort"}}'
+
+# 获取 minikube ip
+minikube ip
+192.168.49.2
+
+# 查看 fe 的端口
+kubectl get svc test-disaggregated-cluster-fe
+NAME                            TYPE       CLUSTER-IP      EXTERNAL-IP   PORT(S)                                                       AGE
+test-disaggregated-cluster-fe   NodePort   10.104.79.145   <none>        8030:32024/TCP,9020:32280/TCP,9030:32557/TCP,9010:31178/TCP   5d
+```
+
+所以在填写 target doris 时：
+- HTTP Nodes: 192.168.49.2:32024
+- MySQL Nodes:  Nodes: 192.168.49.2:32557
+
+> 注意❗️：因为这里的部署方式，doris 部署在集群内部，x2doris 部署在宿主机器上，BE 节点的 Service 地址注册到 FE 是 k8s 集群内部的地址，无法被 doris 访问，因此这里将 BE 的网络类型调整为 NodePort, 在配置 Target Doris 时，HTTP Nodes 和 MySQL Nodes 填写宿主机的 IP 地址。
+
+2. 配置 source doris 任务，参数根据实际情况填写即可
+
+3. 配置数据迁移任务
+
+注意：按照前面的部署方式，这里 任务配置时 master 只能填写 local。
