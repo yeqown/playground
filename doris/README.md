@@ -293,9 +293,9 @@ Disable swap memory before starting be
         fi
 ```
 
-通过在宿主机上执行 `sudo swapoff -a` 关闭交换内存后，Be 就可以正常启动了。
+通过在宿主机上执行 `sudo swapoff -a` 关闭交换内存后，BE 就可以正常启动了，swap 内存通过 `free -m` 可以检查。
 
-2. 重启 minikube 后 FE 跟 meta service 交互提示错误
+2. 重启 minikube 后 FE 跟 MS 交互提示错误
 
 ```bash
 RuntimeLogger 2025-02-28 06:38:51,460 WARN (main|1) [CloudEnv.getLocalTypeFromMetaService():165] failed to get cloud cluster due to incomplete response, cloud_unique_id=1:1751150972:fe, clusterId=RESERVED_CLUSTER_ID_FOR_SQL_SERVER, response=status {

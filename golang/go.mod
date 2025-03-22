@@ -34,7 +34,7 @@ require (
 	github.com/qmuntal/stateless v1.1.5
 	github.com/smallnest/weighted v0.0.0-20190919111400-6285d794850d
 	github.com/speps/go-hashids v2.0.0+incompatible
-	github.com/stretchr/testify v1.8.2
+	github.com/stretchr/testify v1.10.0
 	github.com/syndtr/goleveldb v1.0.0
 	github.com/yeqown/infrastructure v0.3.3
 	golang.org/x/net v0.17.0
@@ -76,6 +76,8 @@ require (
 	github.com/google/go-cmp v0.5.9 // indirect
 	github.com/google/gofuzz v1.2.0 // indirect
 	github.com/google/uuid v1.3.0 // indirect
+	github.com/hashicorp/errwrap v1.0.0 // indirect
+	github.com/hashicorp/go-multierror v1.1.1 // indirect
 	github.com/imdario/mergo v0.3.6 // indirect
 	github.com/jbenet/go-context v0.0.0-20150711004518-d14ea06fba99 // indirect
 	github.com/jinzhu/inflection v1.0.0 // indirect
@@ -109,10 +111,11 @@ require (
 	github.com/spf13/pflag v1.0.5 // indirect
 	github.com/src-d/gcfg v1.4.0 // indirect
 	github.com/stoewer/go-strcase v1.2.0 // indirect
-	github.com/stretchr/objx v0.5.0 // indirect
+	github.com/stretchr/objx v0.5.2 // indirect
 	github.com/ugorji/go/codec v1.1.7 // indirect
 	github.com/vmihailenco/msgpack v4.0.4+incompatible // indirect
 	github.com/xanzy/ssh-agent v0.2.0 // indirect
+	github.com/yeqown/memcached v1.2.1-0.20250301005956-4f3a50de9f35 // indirect
 	golang.org/x/crypto v0.18.0 // indirect
 	golang.org/x/oauth2 v0.10.0 // indirect
 	golang.org/x/sys v0.16.0 // indirect
@@ -141,6 +144,8 @@ require (
 	sigs.k8s.io/yaml v1.3.0 // indirect
 )
 
-go 1.18
+go 1.21
+
+toolchain go1.23.3
 
 // replace github.com/agiledragon/gomonkey/v2 v2.9.0 => ../../gomonkey
