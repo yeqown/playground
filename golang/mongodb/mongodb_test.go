@@ -2,7 +2,7 @@ package mongodb_test
 
 import (
 	"context"
-	"fmt"
+	"encoding/json"
 	"testing"
 	"time"
 
@@ -129,47 +129,57 @@ type User struct {
 	IsActive    bool                   `bson:"is_active"`
 }
 
-// Insert 100000 documents using struct directly, total time: 704.342917ms, avg: 70.434291ms per batch
+var jsonTemplate = `{
+	"name": "jhon",
+	"age": 10,
+	"created_at": "2023-08-21T10:00:00Z",
+	"address": {
+		"street": "Street xxx",
+		"city": "Beijing",
+		"country": "China",
+		"postal_code": "100000"
+	},
+	"contact": {
+		"email": "user_1000@example.com",
+		"phone": "13812308123",
+		"emergency_contacts": ["110", "119", "120"]
+	},
+	"tags": ["vip", "new", "active"],
+	"preferences": {
+		"theme": "dark",
+		"language": "zh-CN",
+		"timezone": "Asia/Shanghai",
+		"notifications": true
+	},
+	"last_logins": ["2023-08-20T10:00:00Z", "2023-08-19T10:00:00Z"],
+	"is_active": true
+}`
+
+// Insert 100000 documents using struct directly, total time: 1.721432459s, avg: 172.143245ms per batch
 func (s *MongoDBTestSuite) TestInsertManyBench_marshal() {
+	// 准备 JSON 模板
+
 	const (
 		batchSize = 10000
 		rounds    = 10 // 总共插入 10w 条记录
 	)
 
-	users := make([]interface{}, batchSize)
-	for i := 0; i < batchSize; i++ {
-		users[i] = User{
-			Name:      fmt.Sprintf("user_%d", i),
-			Age:       25 + (i % 50),
-			CreatedAt: time.Now(),
-			Address: Address{
-				Street:     fmt.Sprintf("Street %d", i),
-				City:       "Beijing",
-				Country:    "China",
-				PostalCode: fmt.Sprintf("1000%d", i%99),
-			},
-			Contact: Contact{
-				Email:     fmt.Sprintf("user_%d@example.com", i),
-				Phone:     fmt.Sprintf("138%08d", i),
-				Emergency: []string{"110", "119", "120"},
-			},
-			Tags: []string{"vip", "new", "active"},
-			Preferences: map[string]interface{}{
-				"theme":         "dark",
-				"language":      "zh-CN",
-				"timezone":      "Asia/Shanghai",
-				"notifications": true,
-			},
-			LastLogins: []time.Time{
-				time.Now().Add(-24 * time.Hour),
-				time.Now().Add(-48 * time.Hour),
-			},
-			IsActive: true,
+	// 根据 batchSize 从 jsonTemplate 从解析出 map[string]interface{}
+	unmarshalJson := func(batchSize int) []interface{} {
+		users := make([]interface{}, batchSize)
+		for i := 0; i < batchSize; i++ {
+			u := make(map[string]interface{}, 16)
+			err := json.Unmarshal([]byte(jsonTemplate), &u)
+			s.Require().NoError(err)
+			users[i] = u
 		}
+
+		return users
 	}
 
 	start := time.Now()
 	for i := 0; i < rounds; i++ {
+		users := unmarshalJson(batchSize)
 		result, err := s.collection.InsertMany(s.ctx, users)
 		s.Require().NoError(err)
 		s.Require().Len(result.InsertedIDs, batchSize)
@@ -180,45 +190,22 @@ func (s *MongoDBTestSuite) TestInsertManyBench_marshal() {
 		batchSize*rounds, duration, duration/time.Duration(rounds))
 }
 
-// Insert 100000 documents using bson.Raw, total time: 392.836334ms, avg: 39.283633ms per batch
+// Insert 100000 documents using bson.Raw, total time: 453.779208ms, avg: 45.37792ms per batch
 func (s *MongoDBTestSuite) TestInsertManyBench_bsonRaw() {
 	const (
 		batchSize = 10000
 		rounds    = 10 // 总共插入 10w 条记录
 	)
 
+	u := make(map[string]interface{}, 16)
+	err := json.Unmarshal([]byte(jsonTemplate), &u)
+	s.Require().NoError(err)
+
+	raw, err := bson.Marshal(u)
+	s.Require().NoError(err)
+
 	rawDocs := make([]interface{}, batchSize)
 	for i := 0; i < batchSize; i++ {
-		user := User{
-			Name:      fmt.Sprintf("user_%d", i),
-			Age:       25 + (i % 50),
-			CreatedAt: time.Now(),
-			Address: Address{
-				Street:     fmt.Sprintf("Street %d", i),
-				City:       "Beijing",
-				Country:    "China",
-				PostalCode: fmt.Sprintf("1000%d", i%99),
-			},
-			Contact: Contact{
-				Email:     fmt.Sprintf("user_%d@example.com", i),
-				Phone:     fmt.Sprintf("138%08d", i),
-				Emergency: []string{"110", "119", "120"},
-			},
-			Tags: []string{"vip", "new", "active"},
-			Preferences: map[string]interface{}{
-				"theme":         "dark",
-				"language":      "zh-CN",
-				"timezone":      "Asia/Shanghai",
-				"notifications": true,
-			},
-			LastLogins: []time.Time{
-				time.Now().Add(-24 * time.Hour),
-				time.Now().Add(-48 * time.Hour),
-			},
-			IsActive: true,
-		}
-		raw, err := bson.Marshal(user)
-		s.Require().NoError(err)
 		rawDocs[i] = raw
 	}
 
