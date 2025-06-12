@@ -1,0 +1,41 @@
+# Rust 编译输出目录
+/target/
+
+# Rust 依赖锁文件（可选择是否忽略）
+# Cargo.lock
+
+# 备份文件
+**/*.rs.bk
+
+# IDE 和编辑器文件
+.idea/
+.vscode/
+*.swp
+*.swo
+.DS_Store
+
+# 调试文件
+**/*.pdb
+**/*.dSYM/
+**/*.su
+**/*.idb
+**/*.pdb
+
+# 本地配置文件
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# 日志文件
+*.log
+
+# 如果使用 rustfmt，忽略其备份文件
+**/*.rs.fmt
+
+# 如果使用 clippy，忽略其生成的文件
+clippy-driver-*.stderr
+
+# 如果使用 cargo-expand，忽略其输出
+*.expanded.rs
