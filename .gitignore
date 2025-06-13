@@ -42,4 +42,5 @@ main
 cmake-build-debug/
 
 bin/
+!rust/bin/
 istio-1.19.3/
