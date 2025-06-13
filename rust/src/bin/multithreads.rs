@@ -1,5 +1,7 @@
+use std::sync::atomic::AtomicUsize;
 use std::sync::{mpsc, Arc, Condvar, Mutex};
 use std::thread;
+use std::time::Duration;
 
 /*
  * 编写一个多线程交替打印的程序，要求如下：
@@ -15,7 +17,9 @@ fn main() {
 
     // example2(); // 使用 Mutex 和 CondVar 来实现
 
-    example3(); // 使用 Channel 来实现
+    // example3(); // 使用 Channel 来实现
+
+    example4(); // 使用 atomic 来实现
 }
 
 #[allow(dead_code, unused)]
@@ -146,6 +150,90 @@ fn example3() {
         }
     });
 
+
+    handle1.join().unwrap();
+    handle2.join().unwrap();
+
+    // 主线程等待子线程结束
+    println!("Main thread finished.");
+}
+
+
+#[allow(dead_code, unused)]
+fn example4() {
+    // 使用 atomic 来实现
+    let counter: Arc<AtomicUsize> = Arc::new(AtomicUsize::new(0));
+
+    let counter1 = counter.clone();
+
+    let handle1 = thread::spawn(move || {
+        let mut i = 1;
+
+        loop {
+            // pub fn compare_exchange(& self, current: usize, new: usize, success: Ordering, failure: Ordering) -> Result<usize, usize>
+            // 其中 success 和 failure 分别指示成功和失败时的内存顺序。
+            // `内存顺序`: 内存顺序是指在多线程环境中，线程之间如何访问内存。
+            // `内存顺序`: 内存顺序有以下几种：
+            // 1. Relaxed: 无任何同步约束，可以乱序执行。
+            // 2. Release: 保证它之前的操作永远在它之前，它之后的操作可能重排到它之前
+            // 3. Acquire: 保证它之后的访问永远在它之后，它之前的操作可能重排到它之后
+            // 4. AcqRel: Acquire 和 Release 的组合，同时提供了 Acquire 和 Release 的保证
+            // 5. SeqCst: 顺序一致性，像是 AcqRel 的加强版
+            match counter1.compare_exchange(
+                i - 1,
+                i,
+                std::sync::atomic::Ordering::SeqCst,
+                std::sync::atomic::Ordering::SeqCst,
+            ) {
+                Ok(_) => {
+                    println!("thread1: {}", i);
+                    i += 2;
+                }
+                Err(e) => {
+                    // println!("thread1: CAS failed, current: {}, not expected: {}", e, i - 1);
+                    thread::sleep(Duration::from_millis(1));
+                    // 让出 CPU 时间片，让其他线程有机会执行
+                    // thread::yield_now();
+                }
+            }
+
+            if i > 100 {
+                break;
+            }
+        }
+
+        println!("thread1 finished.");
+    });
+
+    let counter2 = counter.clone();
+    let handle2 = thread::spawn(move || {
+        let mut i = 2;
+        loop {
+            match counter2.compare_exchange(
+                i - 1,
+                i,
+                std::sync::atomic::Ordering::SeqCst,
+                std::sync::atomic::Ordering::SeqCst,
+            ) {
+                Ok(_) => {
+                    println!("thread2: {}", i);
+                    i += 2;
+                }
+                Err(e) => {
+                    // println!("thread2: CAS failed, current: {}, not expected: {}", e, i - 1);
+                    thread::sleep(Duration::from_millis(1));
+                    // 让出 CPU 时间片，让其他线程有机会执行
+                    // thread::yield_now();
+                }
+            }
+
+            if i > 100 {
+                break;
+            }
+        }
+
+        println!("thread2 finished.");
+    });
 
     handle1.join().unwrap();
     handle2.join().unwrap();
