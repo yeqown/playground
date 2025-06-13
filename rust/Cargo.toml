@@ -12,3 +12,4 @@ name = "main"
 path = "src/main.rs"
 
 [dependencies]
+thiserror = { version = "2.0.12" }
