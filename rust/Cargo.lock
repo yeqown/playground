@@ -468,7 +468,17 @@ version = "0.1.0"
 dependencies = [
  "async-std",
  "futures",
+ "rust-playground-macros",
  "thiserror",
+]
+
+[[package]]
+name = "rust-playground-macros"
+version = "0.1.0"
+dependencies = [
+ "proc-macro2",
+ "quote",
+ "syn 2.0.103",
 ]
 
 [[package]]
