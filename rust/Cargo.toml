@@ -4,7 +4,7 @@ version = "0.1.0"
 edition = "2021"
 
 [workspace]
-members = [".", "macros"]
+members = [".", "macros", "wasm-demo"]
 
 # 启用所有 bin 目录下的文件作为独立可执行文件
 [[bin]]

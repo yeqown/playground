@@ -39,3 +39,5 @@ clippy-driver-*.stderr
 
 # 如果使用 cargo-expand，忽略其输出
 *.expanded.rs
+
+*.wat
