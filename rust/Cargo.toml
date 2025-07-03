@@ -4,7 +4,7 @@ version = "0.1.0"
 edition = "2021"
 
 [workspace]
-members = [".", "macros", "wasm-demo"]
+members = [".", "ffi-demo", "macros", "wasm-demo"]
 
 # 启用所有 bin 目录下的文件作为独立可执行文件
 [[bin]]
@@ -16,3 +16,4 @@ thiserror = { version = "2.0.12" }
 futures = { version = "0.3.31" }
 async-std = { version = "1.13.1", features = ["attributes"] }
 rust-playground-macros = { path = "./macros" }
+rust-playground-ffi = { path = "./ffi-demo" }

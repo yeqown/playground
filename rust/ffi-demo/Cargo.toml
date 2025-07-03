@@ -1,0 +1,13 @@
+[package]
+name = "rust-playground-ffi"
+version = "0.1.0"
+edition = "2021"
+
+[lib]
+name = "rust_lib"
+crate-type = ["staticlib", "cdylib"]
+
+[dependencies]
+
+[build-dependencies]
+cc = "1.0"
