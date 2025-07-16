@@ -41,3 +41,6 @@ clippy-driver-*.stderr
 *.expanded.rs
 
 *.wat
+
+# rustc ice
+rustc-ice-*.txt

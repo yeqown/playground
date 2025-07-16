@@ -1,0 +1,75 @@
+# service YAML
+apiVersion: v1
+kind: Service
+metadata:
+  name: dragonfly
+spec:
+  clusterIP: None  # Headless for DNS-based discovery
+  selector:
+    app: dragonfly
+  ports:
+    - port: 6379
+      name: redis
+    - port: 11211
+      name: memcached
+---
+# 主节点
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: dragonfly
+spec:
+  serviceName: dragonfly
+  replicas: 1
+  selector:
+    matchLabels:
+      app: dragonfly
+  template:
+    metadata:
+      labels:
+        app: dragonfly
+    spec:
+      containers:
+        - name: dragonfly
+          image: docker.dragonflydb.io/dragonflydb/dragonfly
+          args:
+            - "--cache_mode=true"
+            - "--port=6379"
+            - "--memcached_port=11211"
+            - "--maxmemory=2gb"
+          ports:
+            - containerPort: 6379
+              name: redis
+            - containerPort: 11211
+              name: memcached
+---
+# 副本
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: dragonfly-replica
+spec:
+  serviceName: dragonfly
+  replicas: 2
+  selector:
+    matchLabels:
+      app: dragonfly-replica
+  template:
+    metadata:
+      labels:
+        app: dragonfly-replica
+    spec:
+      containers:
+        - name: dragonfly-replica
+          image: docker.dragonflydb.io/dragonflydb/dragonfly
+          args:
+            - "--cache_mode=true"
+            - "--replicaof=dragonfly-0.dragonfly.default.svc.cluster.local"
+            - "--port=6379"
+            - "--memcached_port=11211"
+            - "--maxmemory=2gb"
+          ports:
+            - containerPort: 6379
+              name: redis
+            - containerPort: 11211
+              name: memcached
