@@ -1,0 +1,53 @@
+version: '3.8'
+
+services:
+  zookeeper-source:
+    image: confluentinc/cp-zookeeper:7.4.0
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+    ports:
+      - "2181:2181"
+
+  kafka-source:
+    image: confluentinc/cp-kafka:7.4.0
+    depends_on:
+      - zookeeper-source
+    ports:
+      - "9092:9092"
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper-source:2181
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://localhost:9092
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+
+  zookeeper-target:
+    image: confluentinc/cp-zookeeper:7.4.0
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2182
+    ports:
+      - "2182:2182"
+
+  kafka-target:
+    image: confluentinc/cp-kafka:7.4.0
+    depends_on:
+      - zookeeper-target
+    ports:
+      - "9093:9093"
+    environment:
+      KAFKA_BROKER_ID: 2
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper-target:2182
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://localhost:9093
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+
+  mirrormaker2:
+    image: confluentinc/cp-kafka:7.4.0
+    depends_on:
+      - kafka-source
+      - kafka-target
+    volumes:
+      - ./mm2.properties:/mm2.properties
+    command: >
+      bash -c "
+        sleep 30 &&
+        /usr/bin/connect-mirror-maker /mm2.properties
+      "
