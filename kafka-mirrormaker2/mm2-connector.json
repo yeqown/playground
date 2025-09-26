@@ -1,0 +1,17 @@
+{
+  "name": "mm2-source-connector",
+  "config": {
+    "connector.class": "org.apache.kafka.connect.mirror.MirrorSourceConnector",
+    "source.cluster.alias": "source",
+    "target.cluster.alias": "target",
+    "source.cluster.bootstrap.servers": "kafka-source:9092",
+    "target.cluster.bootstrap.servers": "kafka-target:9092",
+    "topics": "test-topic,test-topic-second",
+    "replication.factor": 1,
+    "sync.topic.acls.enabled": false,
+    "emit.heartbeats.enabled": false,
+    "emit.checkpoints.enabled": false,
+    "refresh.topics.interval.seconds": 5,
+    "tasks.max": 2
+  }
+}
