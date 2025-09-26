@@ -1,0 +1,110 @@
+{
+  "source-test-topic-2": {
+    "cluster": "source",
+    "topic": "test-topic",
+    "partition": 2,
+    "offset": 24
+  },
+  "source-test-topic-second-1": {
+    "cluster": "source",
+    "topic": "test-topic-second",
+    "partition": 1,
+    "offset": 25
+  },
+  "source-test-topic-4": {
+    "cluster": "source",
+    "topic": "test-topic",
+    "partition": 4,
+    "offset": 26
+  },
+  "source-test-topic-5": {
+    "cluster": "source",
+    "topic": "test-topic",
+    "partition": 5,
+    "offset": 40
+  },
+  "source-test-topic-second-2": {
+    "cluster": "source",
+    "topic": "test-topic-second",
+    "partition": 2,
+    "offset": 24
+  },
+  "source-test-topic-1": {
+    "cluster": "source",
+    "topic": "test-topic",
+    "partition": 1,
+    "offset": 29
+  },
+  "source-test-topic-second-6": {
+    "cluster": "source",
+    "topic": "test-topic-second",
+    "partition": 6,
+    "offset": 30
+  },
+  "source-test-topic-7": {
+    "cluster": "source",
+    "topic": "test-topic",
+    "partition": 7,
+    "offset": 29
+  },
+  "source-test-topic-6": {
+    "cluster": "source",
+    "topic": "test-topic",
+    "partition": 6,
+    "offset": 29
+  },
+  "source-test-topic-second-3": {
+    "cluster": "source",
+    "topic": "test-topic-second",
+    "partition": 3,
+    "offset": 36
+  },
+  "source-test-topic-second-4": {
+    "cluster": "source",
+    "topic": "test-topic-second",
+    "partition": 4,
+    "offset": 26
+  },
+  "source-test-topic-second-0": {
+    "cluster": "source",
+    "topic": "test-topic-second",
+    "partition": 0,
+    "offset": 24
+  },
+  "source-test-topic-second-5": {
+    "cluster": "source",
+    "topic": "test-topic-second",
+    "partition": 5,
+    "offset": 32
+  },
+  "source-test-topic-0": {
+    "cluster": "source",
+    "topic": "test-topic",
+    "partition": 0,
+    "offset": 28
+  },
+  "source-test-topic-second-7": {
+    "cluster": "source",
+    "topic": "test-topic-second",
+    "partition": 7,
+    "offset": 38
+  },
+  "source-test-topic-8": {
+    "cluster": "source",
+    "topic": "test-topic",
+    "partition": 8,
+    "offset": 34
+  },
+  "source-test-topic-3": {
+    "cluster": "source",
+    "topic": "test-topic",
+    "partition": 3,
+    "offset": 25
+  },
+  "source-test-topic-second-8": {
+    "cluster": "source",
+    "topic": "test-topic-second",
+    "partition": 8,
+    "offset": 29
+  }
+}

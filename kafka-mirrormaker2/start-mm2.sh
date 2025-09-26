@@ -62,9 +62,9 @@ else
   echo "Waiting 10 seconds for Kafka Connect cluster to be ready..."
   sleep 10
 
-  # Submit MirrorMaker2 connector configuration
-  echo "Submitting MirrorMaker2 connector configuration..."
-  curl -X POST -H "Content-Type: application/json" --data @mm2-connector.json http://localhost:8083/connectors
+  # # Submit MirrorMaker2 connector configuration
+  # echo "Submitting MirrorMaker2 connector configuration..."
+  # curl -X POST -H "Content-Type: application/json" --data @mm2-connector.json http://localhost:8083/connectors
 fi
 
 echo "Environment ready!"

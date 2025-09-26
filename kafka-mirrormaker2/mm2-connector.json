@@ -12,6 +12,7 @@
     "emit.heartbeats.enabled": false,
     "emit.checkpoints.enabled": false,
     "refresh.topics.interval.seconds": 5,
+    "offset.lag.max": 0,
     "tasks.max": 2
   }
 }
