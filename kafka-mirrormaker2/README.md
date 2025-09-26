@@ -3,13 +3,14 @@
 ## 环境组成
 - Source Kafka 集群: localhost:9092 (Bitnami Kafka 3.3.2)
 - Target Kafka 集群: localhost:9094 (Bitnami Kafka 3.3.2)
-- MirrorMaker2: 复制 test-topic 从 source 到 target
+- MirrorMaker2: 复制 test-topic / test-topic-second 从 source 到 target
 
 ## 使用方法
 
 1. 启动环境:
 ```bash
-./start.sh
+./start-kafka.sh
+./start-mm2.sh [1/2]
 ```
 
 2. 开始生产数据:
@@ -50,5 +51,5 @@ podman exec kafka-target /opt/bitnami/kafka/bin/kafka-run-class.sh kafka.tools.G
 
 ## 停止环境
 ```bash
-./stop.sh
+./stop.sh [kafka/mm2/all]
 ```
